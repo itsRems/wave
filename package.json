@@ -1,27 +1,21 @@
 {
   "name": "pulse-wave",
   "version": "1.0.0-alpha.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "directories": {
-    "lib": "lib"
-  },
+  "main": "index.js",
+  "repository": "git@github.com:itsRems/pulse-wave",
+  "author": "itsRems <contact@itsrems.com>",
+  "license": "MIT",
+  "private": true,
   "scripts": {
-    "dev": "tsc-watch"
+    "build": "lerna run build",
+    "dev": "lerna bootstrap && lerna run build && lerna run dev --parallel",
+    "release": "rimraf packages/**/dist && yarn build && lerna publish"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/itsRems/pulse-wave.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/itsRems/pulse-wave/issues"
-  },
-  "homepage": "https://github.com/itsRems/pulse-wave#readme",
   "devDependencies": {
-    "tsc-watch": "^4.2.9",
-    "typescript": "^4.0.2"
-  }
+    "lerna": "^3.22.1",
+    "rimraf": "^3.0.2"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
