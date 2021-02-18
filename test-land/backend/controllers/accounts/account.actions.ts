@@ -10,7 +10,7 @@ interface AccountCreationPayload {
   password: string;
 }
 
-export const newAccount = action('account-create').process(async function (payload: AccountCreationPayload) {
+export const create = action<AccountCreationPayload>('account-create').process(async function (payload: AccountCreationPayload) {
   const match = await collection.match(payload, { mode: 'any' }); // check if any of the provided fields matches a db entry.
   if (match) {
     const matchedField = match.matches[0];
@@ -22,7 +22,7 @@ export const newAccount = action('account-create').process(async function (paylo
   }
 }).rest({ method: 'POST', route: '/create' }); // assuming we are using a defined controller, this route will be accessible under /accounts/create
 
-export const getAccount = action('get-account').process(async function (payload: { id: string }) {
+export const get = action('get-account').process(async function (payload: { id: string }) {
   const user = await collection.findById(payload.id);
   if (!user) return {
     status: 'not_found'

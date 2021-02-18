@@ -6,6 +6,5 @@ import {
 } from './account.store';
 
 export const accounts = controller({
-  actions,
   collection
-});
+}).root(actions);

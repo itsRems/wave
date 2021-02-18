@@ -2,7 +2,7 @@
 import { collection, data, utils } from '@pulsejs/wave';
 import { AccountBody } from './account.interfaces';
 
-export const AccountCollection = collection<AccountBody>()
+export const AccountCollection = collection<AccountBody>('account-collection')
   .model({
     id: [String, data.PrimaryKey],
     username: [String, data.Required],

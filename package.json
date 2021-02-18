@@ -16,6 +16,7 @@
     "rimraf": "^3.0.2"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "testapps/*"
   ]
 }
