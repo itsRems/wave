@@ -11,11 +11,17 @@ interface AccountCreationPayload {
 }
 
 export const newAccount = action('account-create').function(async function (payload: AccountCreationPayload) {
-  const exists = await collection.exists(payload, { mode: 'any' });
-  if (exists) return {
-    status: 'duplicate', // was using 'error' first but I thought we could have a standard status/data format
-    data: exists.fields[exists.firstFound]
-  };
-}).rest({ method: 'POST', route: '/create' }); // should we assume the route will be under /accounts/create ? I think so
+  const match = await collection.match(payload, { mode: 'any' }); // check if any of the provided fields matches a db entry.
+  if (match) {
+    const matchedField = match.matches[0];
+    console.log('someone tried to create a user with', payload, `but ${match.data.id} matched for the ${matchedField} field`);
+    return {
+      status: 'duplicate', // set the status; this is custom
+      data: matchedField
+    };
+  }
+}).rest({ method: 'POST', route: '/create' }); // assuming we are using a defined controller, this route will be accessible under /accounts/create
 
-// ... actions would be wrapped in the controller so that they are defined and "catchable" by the WS server
+export const getAccount = actions('get-account').function(async function (payload: { id: string }) {
+  const 
+})
