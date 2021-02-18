@@ -5,7 +5,7 @@ export interface ActionReturn {
 
 export type ProcessReturn = Promise<ActionReturn> | ActionReturn;
 
-interface ProcessFunc<PayloadType> {
+export interface ProcessFunc<PayloadType> {
   (payload: PayloadType): ProcessReturn;
 }
 
@@ -21,6 +21,14 @@ export class action<PayloadType = any> {
   public process (callback: ProcessFunc<PayloadType>) {
     this.func = callback;
     return this;
+  }
+
+  public async call (payload: PayloadType) {
+    try {
+      return await this.func(payload);
+    } catch (error) {
+      
+    }
   }
 }
 
