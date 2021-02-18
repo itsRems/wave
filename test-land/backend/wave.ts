@@ -10,13 +10,33 @@ config({
     host: '127.0.0.1',
     port: 6379
   },
-  api: {
-    rest: {
-      port: 1501
-    },
-    ws: {
-      port: 1500
+  rest: {
+    port: 1501,
+    // req/res from Fastify
+    send: async function (req, res, ctx) {
+      let status: number;
+      switch (ctx.status) {
+        case 'not_found':
+          status = 404;
+          break;
+
+        case 'duplicate':
+          status = 409;
+          break;
+
+        case 'error':
+          status = 500;
+          break;
+      
+        default:
+          status = 200;
+          break;
+      }
+      return res.status(status).send({ data: ctx.data })
     }
+  },
+  link: {
+    port: 1500
   }
 });
 
