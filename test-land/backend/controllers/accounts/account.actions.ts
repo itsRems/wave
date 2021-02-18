@@ -23,5 +23,12 @@ export const newAccount = action('account-create').function(async function (payl
 }).rest({ method: 'POST', route: '/create' }); // assuming we are using a defined controller, this route will be accessible under /accounts/create
 
 export const getAccount = actions('get-account').function(async function (payload: { id: string }) {
-  const 
+  const user = await collection.findById(payload.id);
+  if (!user) return {
+    status: 'not_found'
+  }
+  return {
+    status: 'success',
+    data: user.public()
+  }
 })
