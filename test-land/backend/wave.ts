@@ -11,7 +11,6 @@ config({
     port: 6379
   },
   rest: {
-    port: 1501,
     // req/res from Fastify
     send: async function (req, res, ctx) {
       let status: number;

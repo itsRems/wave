@@ -1,20 +1,20 @@
 import Queue from 'bee-queue';
-import { Action } from './internal';
+import { Action, LinkServer } from './internal';
 
 interface WaveConfig {
   redis?: {
     host?: string;
     port?: number;
-  }
-  queue?: {}
+  };
+  queue?: {};
+  rest?: {};
   link?: {
     port?: number;
-  }
+  };
 }
 
 export class Wave {
   public _actions: Set<Action> = new Set();
-  public _queues: Set<Queue> = new Set();
   public _config: WaveConfig = {
     redis: {
       host: '127.0.0.1',
@@ -24,11 +24,13 @@ export class Wave {
       port: 1500
     }
   };
+  public _link: LinkServer;
+  public _queues: Set<Queue> = new Set();
 
   public ready: boolean = false;
 
   constructor () {
-    this.globalBind();
+    if (!globalThis.__wave__app) this.globalBind();
   }
 
   public Action <PayloadType = any> (name: string): Action<PayloadType> {
@@ -40,7 +42,7 @@ export class Wave {
   public async Start () {
     if (this.ready) {
       console.warn('Wave start was already called, aborting...');
-    };
+    }
     for (const action of this._actions) {
       const qName = `wave-q-${action}`;
       const q = new Queue(qName);
@@ -49,12 +51,22 @@ export class Wave {
       });
       this._queues.add(q);
     }
+    if (!this._link) this._link = new LinkServer();
+    this._link.Listen(this);
     console.log(`[Wave] Wave is up and running !`);
     this.ready = true;
   }
 
   public Configure (config: WaveConfig) {
     this._config = config;
+  }
+
+  public getAction (name: string): Action {
+    let result;
+    for (const action of this._actions) {
+      if (name === action.name) result = action; 
+    }
+    return result;
   }
 
   private globalBind () {
@@ -65,10 +77,4 @@ export class Wave {
       // fail silently
     }
   }
-}
-
-export function getWave (): Wave {
-  if (globalThis.__wave__app) return globalThis.__wave__app;
-  const wave = new Wave();
-  return wave;
 }

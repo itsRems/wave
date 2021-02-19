@@ -1,3 +1,7 @@
 export { Action } from './action';
 
-export { getWave, Wave } from './wave';
+export { Wave } from './wave';
+
+export { LinkServer } from './link';
+export * from './utils';
+export { wave } from './callers';
