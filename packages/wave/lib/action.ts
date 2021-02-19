@@ -31,19 +31,16 @@ export class Action<PayloadType = any> {
   }
 
   public async call (payload: PayloadType): Promise<ActionReturn> {
-    try {
-      return await new Promise((resolve, reject) => {
-        const job = this.queue.createJob(payload);
-        job.on('succeeded', (result) => (resolve(result)));
-        job.on('failed', (error) => (reject(error)));
-        job.save();
-      });
-    } catch (error) {
-      return undefined;
-    }
+    return await new Promise((resolve, reject) => {
+      const job = this.queue.createJob(payload);
+      job.on('succeeded', (result) => (resolve(result)));
+      job.on('failed', (error) => (reject(error)));
+      job.save();
+    });
   }
 
   public initListen () {
+    if (!this.func || !this.queue) return;
     this.queue.process(async ({ data }) => (await this.func(data)));
   }
 }
