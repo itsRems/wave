@@ -9,9 +9,9 @@ export interface ProcessFunc<PayloadType> {
   (payload: PayloadType): ProcessReturn;
 }
 
-export class action<PayloadType = any> {
+export class Action<PayloadType = any> {
   public name: string;
-  private func: Function;
+  public func: Function;
 
   constructor (name: string) {
     this.name = name;
@@ -31,5 +31,3 @@ export class action<PayloadType = any> {
     }
   }
 }
-
-export default action;
