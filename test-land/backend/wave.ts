@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { auto, config } from '@pulsejs/wave';
+import { auto, config, start } from '@pulsejs/wave';
 
 config({
   cache: {
@@ -41,3 +41,5 @@ config({
 });
 
 auto.controllers('./controllers'); // Automatically import & initialize controllers under the 'controllers' directory
+
+start();

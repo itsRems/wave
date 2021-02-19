@@ -1,9 +1,30 @@
 import Queue from 'bee-queue';
 import { Action } from './internal';
 
+interface WaveConfig {
+  redis?: {
+    host?: string;
+    port?: number;
+  }
+  queue?: {}
+  link?: {
+    port?: number;
+  }
+}
+
 export class Wave {
   public _actions: Set<Action> = new Set();
   public _queues: Set<Queue> = new Set();
+  public _config: WaveConfig = {
+    redis: {
+      host: '127.0.0.1',
+      port: 6379
+    },
+    link: {
+      port: 1500
+    }
+  };
+
   public ready: boolean = false;
 
   constructor () {
@@ -30,6 +51,10 @@ export class Wave {
     }
     console.log(`[Wave] Wave is up and running !`);
     this.ready = true;
+  }
+
+  public Configure (config: WaveConfig) {
+    this._config = config;
   }
 
   private globalBind () {
