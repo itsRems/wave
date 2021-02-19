@@ -1,7 +1,7 @@
 import Queue from 'bee-queue';
-import { Action, LinkServer } from './internal';
+import { Action, LinkServer, makeQueueName } from './internal';
 
-interface WaveConfig {
+export interface WaveConfig {
   redis?: {
     host?: string;
     port?: number;
@@ -25,7 +25,6 @@ export class Wave {
     }
   };
   public _link: LinkServer;
-  public _queues: Set<Queue> = new Set();
 
   public ready: boolean = false;
 
@@ -44,12 +43,7 @@ export class Wave {
       console.warn('Wave start was already called, aborting...');
     }
     for (const action of this._actions) {
-      const qName = `wave-q-${action}`;
-      const q = new Queue(qName);
-      q.process(async function ({ data }) {
-        return await action.func(data);
-      });
-      this._queues.add(q);
+      action.initListen();
     }
     if (!this._link) this._link = new LinkServer();
     this._link.Listen(this);
@@ -62,7 +56,7 @@ export class Wave {
   }
 
   public getAction (name: string): Action {
-    let result;
+    let result: Action;
     for (const action of this._actions) {
       if (name === action.name) result = action; 
     }

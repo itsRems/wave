@@ -7,3 +7,7 @@ export function identifyAction (action: string): {
     extracted: action.replace('wave-call-incoming-', '')
   };
 }
+
+export function makeQueueName (actionName: string): string {
+  return `wave-q-${actionName}`;
+}
