@@ -5,7 +5,7 @@ const test = action<{
 }>('yep').process(async function ({ username }) {
   return {
     status: 'success',
-    data: username
+    data: `${username} is a cool dood !`
   };
 });
 

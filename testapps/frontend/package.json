@@ -1,0 +1,29 @@
+{
+  "name": "@itsrems/wavefrontenddemo",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@pulsejs/core": "~3.5.1",
+    "@pulsejs/next": "^3.5.4",
+    "@pulsejs/react": "~3.5.1",
+    "@pulsejs/link": "1.0.0-alpha.0",
+    "next": "latest",
+    "react": "~16.13.0",
+    "react-dom": "~16.13.0",
+    "sass": "^1.32.0",
+    "styled-components": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "12.0.12",
+    "@types/react": "16.8.23",
+    "@types/react-dom": "16.8.4",
+    "@types/styled-components": "5.0.1",
+    "babel-plugin-styled-components": "^1.10.0",
+    "typescript": "4.0"
+  },
+  "license": "MIT"
+}

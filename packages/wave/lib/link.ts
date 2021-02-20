@@ -22,6 +22,7 @@ export class LinkServer {
             const action = wave().getAction(extracted);
             if (action) {
               const result = await action.call(data);
+              console.log('r', result, 'd', data);
               return ws.send(JSON.stringify({
                 action: `wave-call-return-${extracted}`,
                 data: result
