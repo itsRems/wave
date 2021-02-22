@@ -1,4 +1,5 @@
 export { Action } from './action';
+export { Collection, data } from './collection';
 
 export { Wave } from './wave';
 

@@ -33,8 +33,8 @@ export class Link {
   }
 
   public async Call (action: string, payload: any): Promise<ActionReturn> {
-    await this.waitForReady();
-    return await new Promise((resolve) => {
+    return await new Promise(async (resolve) => {
+      await this.waitForReady();
       this._ws.send(JSON.stringify({
         action: `wave-call-incoming-${action}`,
         data: payload

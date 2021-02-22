@@ -1,5 +1,4 @@
 import Queue from 'bee-queue';
-import { wave } from './callers';
 import { makeQueueName } from './internal';
 
 export interface ActionReturn {

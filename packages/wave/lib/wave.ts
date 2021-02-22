@@ -1,5 +1,5 @@
 import Queue from 'bee-queue';
-import { Action, LinkServer, makeQueueName } from './internal';
+import { Action, Collection, LinkServer, makeQueueName } from './internal';
 
 export interface WaveConfig {
   redis?: {
@@ -15,6 +15,7 @@ export interface WaveConfig {
 
 export class Wave {
   public _actions: Set<Action> = new Set();
+  public _collections: Set<Collection> = new Set();
   public _config: WaveConfig = {
     redis: {
       host: '127.0.0.1',
@@ -36,6 +37,12 @@ export class Wave {
     const action = new Action<PayloadType>(name);
     this._actions.add(action);
     return action;
+  }
+
+  public Collection <DataType = any> (name: string): Collection<DataType> {
+    const collection = new Collection<DataType>(name);
+    this._collections.add(collection);
+    return collection;
   }
 
   public async Start () {

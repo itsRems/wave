@@ -1,4 +1,4 @@
-import { action, start } from '@pulsejs/wave';
+import { action, collection, data, start } from '@pulsejs/wave';
 
 const test = action<{
   username: string;
@@ -9,8 +9,18 @@ const test = action<{
   };
 });
 
+const store = collection<{
+  id: string;
+  username: string;
+}>('test-collection')
+  .model({
+    id: [String, data.PrimaryKey],
+    username: [String, data.Required]
+  })
+
 async function afterStart () {
   console.log(await test.call({ username: 'nico' }));
+  console.log(store);
 }
 
 start();
