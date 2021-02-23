@@ -12,10 +12,12 @@ const test = action<{
 const store = collection<{
   id: string;
   username: string;
+  test: string;
 }>('test-collection')
   .model({
     id: [String, data.PrimaryKey],
-    username: [String, data.Required]
+    username: [String, data.Required],
+    test: [String]
   })
 
 async function afterStart () {

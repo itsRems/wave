@@ -45,3 +45,7 @@ export function toMS (time: number, unit: TimeUnits): number {
 
   return final;
 }
+
+export function mergeTo<T>(target: T, defaults): T {
+  return { ...defaults, ...target };
+}

@@ -19,8 +19,9 @@ export class Collection <DataType = any> {
     this.name = name;
   }
 
-  public model (model: ModelPayload) {
-    console.log(model, this._model);
+  public model (model: {
+    [key in keyof DataType]: [GenericModelTypes, ...Array<ModelTypes>];
+  }) {
     for (const key in model) {
       const value = model[key];
       console.log(key, value);
@@ -41,11 +42,7 @@ export class Collection <DataType = any> {
     return this;
   }
 
-  public findById (id: string) {
+  public async findById (id: string) {
 
   }
 }
-
-const test = new Collection('test-collection').model({
-  id: [String, ModelTypes.PrimaryKey]
-})
