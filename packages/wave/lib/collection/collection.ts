@@ -56,3 +56,8 @@ export class Collection <DataType = any> {
 
   }
 }
+
+/**
+ * Idea: have a query system (for link) that allows to write action-like queries in collections, but they return a subscribable data set.
+ * So that if the orignal data changes, our ws connection gets a message with the data update
+ */

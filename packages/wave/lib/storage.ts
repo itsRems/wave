@@ -13,6 +13,9 @@ export interface StorageDriver {
       nested?: boolean;
     }): Promise<any>;
   };
+  deleteDocument: {
+    (collection: Collection, id: string): Promise<void>;
+  };
   findById: {
     (collection: Collection, id: string): Promise<any>;
   };

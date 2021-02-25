@@ -19,7 +19,7 @@ const store = collection<{
 }>('test-collection')
   .model({
     id: [String, data.PrimaryKey],
-    username: [String, data.Required],
+    username: [String, data.Required, data.Index],
     test: [String]
   })
 
