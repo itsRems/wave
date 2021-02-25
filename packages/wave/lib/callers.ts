@@ -14,11 +14,14 @@ export function config (config: WaveConfig) {
   return wave();
 }
 
-export function start (): Wave {
-  wave().Start();
-  return wave();
+export async function start (): Promise<Wave> {
+  return await wave().Start();
 }
 
+/**
+ * Returns the current wave instance
+ * If none is found, creates a new instance and binds it
+ */
 export function wave (): Wave {
   if (globalThis.__wave__app) return globalThis.__wave__app;
   const wave = new Wave();

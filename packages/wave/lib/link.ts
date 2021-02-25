@@ -1,13 +1,19 @@
 import { App, TemplatedApp } from 'uWebSockets.js';
 import { identifyAction, wave, Wave } from './internal';
 
+export interface LinkConfig {
+  port?: number;
+}
+
 export class LinkServer {
 
   private uws: TemplatedApp;
 
+  public _config: LinkConfig;
   public open: boolean;
 
-  constructor () {
+  constructor (config?: LinkConfig) {
+    if (config) this._config = config;
     this.uws = App();
   }
 
@@ -36,13 +42,13 @@ export class LinkServer {
   }
 
   private InitRest () {
-    console.log(`[Wave] rest is todo ;)`);
+    console.log(`[Wave] rest is a todo ;)`);
   }
 
   public Listen (wave: Wave) {
     if (wave._config.rest) this.InitRest();
     this.InitWs();
-    const port = wave._config.link?.port || 1500;
+    const port = this._config.port || 1500;
     this.uws.listen(port, (socket) => {
       if (socket) {
         console.log(`[Wave/Link] Link server is listenning on port ${port}`)

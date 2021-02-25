@@ -31,4 +31,4 @@ export const get = action('get-account').process(async function (payload: { id: 
     status: 'success',
     data: user.public()
   }
-}).retry(3, 20); // in case this fails, retry 3 times within the next 20 seconds
+}).cache(15, 'minutes').retry(3, 20); // in case this fails, retry 3 times within the next 20 seconds

@@ -9,9 +9,7 @@ async function afterStart () {
 }
 
 config({
-  link: {
-    port: 1505
-  }
+  link: false
 });
 
 start();

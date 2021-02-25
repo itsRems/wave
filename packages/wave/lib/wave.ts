@@ -1,16 +1,18 @@
 import Queue from 'bee-queue';
-import { Action, Collection, LinkServer, makeQueueName } from './internal';
+import { Action, Cache, CacheConfig, Collection, LinkConfig, LinkServer, Storage } from './internal';
+
+export interface RedisConfig {
+  host: string;
+  port: number;
+  password: string;
+}
 
 export interface WaveConfig {
-  redis?: {
-    host?: string;
-    port?: number;
-  };
+  redis?: Partial<RedisConfig>;
+  cache?: CacheConfig;
   queue?: {};
   rest?: {};
-  link?: {
-    port?: number;
-  };
+  link?: false | LinkConfig;
 }
 
 export class Wave {
@@ -25,7 +27,9 @@ export class Wave {
       port: 1500
     }
   };
-  public _link: LinkServer;
+  public link: LinkServer;
+  public storage: Storage;
+  public cache: Cache;
 
   public ready: boolean = false;
 
@@ -48,18 +52,39 @@ export class Wave {
   public async Start () {
     if (this.ready) {
       console.warn('Wave start was already called, aborting...');
+      return;
+    }
+    if (!this.storage) {
+      try {
+        const test = require('@pulsejs/wave-sqlite');
+        this.storage = new Storage(test);
+      } catch (error) {
+        return Promise.reject(`
+          It looks like you forgot to set a storage for wave. \n
+          If you're just checking us out, install @pulsejs/wave-sqlite for a seamless configuration !
+        `);
+      }
+    }
+    if (!this.cache) {
+      this.cache = new Cache(this._config.cache);
     }
     for (const action of this._actions) {
       action.initListen();
     }
-    if (!this._link) this._link = new LinkServer();
-    this._link.Listen(this);
+    if (this._config.link) {
+      if (!this.link) this.link = new LinkServer(this._config.link);
+      this.link.Listen(this);
+    }
     console.log(`[Wave] Wave is up and running !`);
     this.ready = true;
+    return this;
   }
 
   public Configure (config: WaveConfig) {
-    this._config = config;
+    this._config = {
+      ...this._config,
+      ...config
+    };
   }
 
   public getAction (name: string): Action {

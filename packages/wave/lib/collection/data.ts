@@ -6,4 +6,10 @@ export const ModelTypes = {
   Secret: 'Secret'
 } as const;
 
-export type ModelTypes = typeof ModelTypes[keyof typeof ModelTypes]
+export type ModelTypes = typeof ModelTypes[keyof typeof ModelTypes];
+
+export class Data <DataType = any> {
+  constructor (data) {
+
+  }
+}

@@ -12,7 +12,7 @@ export function makeQueueName (actionName: string): string {
   return `wave-q-${actionName}`;
 }
 
-export type TimeUnits = 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks';
+export type TimeUnits = 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks';
 
 export function toMS (time: number, unit: TimeUnits): number {
   let final = 0;
@@ -46,6 +46,6 @@ export function toMS (time: number, unit: TimeUnits): number {
   return final;
 }
 
-export function mergeTo<T>(target: T, defaults): T {
+export function mergeTo<T>(target: T, defaults: Partial<T>): T {
   return { ...defaults, ...target };
 }

@@ -3,11 +3,14 @@ import { action, collection, data, start } from '@pulsejs/wave';
 const test = action<{
   username: string;
 }>('yep').process(async function ({ username }) {
+  await new Promise((resolve) => {
+    setTimeout(() => (resolve(true)), 2500);
+  });
   return {
     status: 'success',
     data: `${username} is a cool dood !`
   };
-});
+}).cache(1);
 
 const store = collection<{
   id: string;

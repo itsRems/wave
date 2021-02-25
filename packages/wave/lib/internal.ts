@@ -1,8 +1,12 @@
 export { Action } from './action';
-export { Collection, data } from './collection';
 
-export { Wave } from './wave';
+export { Cache, CacheConfig } from './cache';
 
-export { LinkServer } from './link';
+export { Collection, data, ModelPayload } from './collection';
+
+export { RedisConfig, Wave } from './wave';
+
+export { LinkConfig, LinkServer } from './link';
 export * from './utils';
 export { action, config, wave } from './callers';
+export { Storage, StorageDriver } from './storage';
