@@ -9,7 +9,7 @@
   "scripts": {
     "build": "lerna run build",
     "dev": "lerna bootstrap && lerna run build && lerna run dev --parallel",
-    "release": "rimraf packages/**/dist && yarn build --scope @itsrems/wave @itsrems/wave-sqlite @itsrems/link && lerna publish --scope @itsrems/wave @itsrems/wave-sqlite @itsrems/link"
+    "release": "rimraf packages/**/dist && yarn build --no-private && lerna publish --no-private"
   },
   "devDependencies": {
     "lerna": "^3.22.1",
