@@ -1,5 +1,5 @@
 import Queue from 'bee-queue';
-import { Action, Cache, CacheConfig, Collection, LinkConfig, LinkServer, Storage } from './internal';
+import { Action, Cache, CacheConfig, Collection, LinkConfig, LinkServer, Storage, StorageDriver } from './internal';
 
 export interface RedisConfig {
   host: string;
@@ -10,6 +10,7 @@ export interface RedisConfig {
 export interface WaveConfig {
   redis?: Partial<RedisConfig>;
   cache?: CacheConfig;
+  collections?: false | {};
   queue?: {};
   rest?: {};
   link?: false | LinkConfig;
@@ -55,17 +56,21 @@ export class Wave {
       return;
     }
     if (!this.storage) {
-      try {
-        const test = require('@itsrems/wave-sqlite');
-        this.storage = new Storage(test);
-      } catch (error) {
-        return Promise.reject(`
-          It looks like you forgot to set a storage for wave. \n
-          If you're just checking us out, install @itsrems/wave-sqlite for a seamless configuration !
-        `);
+      if (this._collections.size > 0) {
+        try {
+          const test = require('@itsrems/wave-sqlite');
+          this.storage = new Storage(test);
+        } catch (error) {
+          return Promise.reject(`
+            [Wave] It looks like you forgot to set a storage for wave. \n
+            If you're just checking us out, install @itsrems/wave-sqlite for a seamless configuration !
+          `);
+        }
+      } else {
+        console.log(`[Wave] No collections appear to have been created, aborting storage creation...`)
       }
     }
-    await this.storage.initialize();
+    if (this.storage) await this.storage.initialize();
     if (!this.cache) {
       this.cache = new Cache(this._config.cache);
     }
@@ -94,6 +99,11 @@ export class Wave {
       if (name === action.name) result = action; 
     }
     return result;
+  }
+
+  public setStorage (driver: StorageDriver): this {
+    this.storage = new Storage(driver);
+    return this;
   }
 
   private globalBind () {
