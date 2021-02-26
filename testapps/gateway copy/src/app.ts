@@ -1,4 +1,4 @@
-import { action, config, start } from '@pulsejs/wave';
+import { action, config, start } from '@itsrems/wave';
 
 const test = action<{
   username: string;

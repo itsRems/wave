@@ -1,8 +1,14 @@
-import { Collection, Wave } from "./internal";
+import { Collection, Wave, wave } from "./internal";
 import { mergeTo } from "./utils";
 
 export interface StorageDriver {
   usesJson?: boolean;
+  initialize: {
+    (instance: Wave): Promise<void>;
+  };
+  doMigrations: {
+    (collections: Collection[]): Promise<void>;
+  };
   createDocument: {
     (collection: Collection, document: Object): Promise<void>;
   };
@@ -42,17 +48,28 @@ export interface StorageDriver {
 export class Storage {
   public driver: StorageDriver;
   public storageReady: boolean;
+  public instance: () => Wave;
 
   constructor (driver: StorageDriver) {
     this.driver = mergeTo(driver, {
       usesJson: false
     });
-    // @todo: connect method
+    this.instance = wave;
+  }
+
+  public async initialize () {
+    if (!this.isFunction(this.driver.initialize)) throw 'The driver\'s initialize function is not valid ! Aborting...';
+    await this.driver.initialize(this.instance());
+    if (this.isFunction(this.driver.doMigrations)) this.driver.doMigrations(Array.from(this.instance()._collections));
     this.storageReady = true;
   }
 
   public async findById (collection: Collection, id: string) {
     if (!this.storageReady) return undefined;
     return await this.driver.findById(collection, id);
+  }
+
+  private isFunction (func: any): boolean {
+    return func && {}.toString.call(func) === '[object Function]';
   }
 }

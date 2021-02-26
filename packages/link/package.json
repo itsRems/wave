@@ -1,5 +1,5 @@
 {
-  "name": "@pulsejs/link",
+  "name": "@itsrems/link",
   "version": "1.0.0-alpha.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { call } from '@pulsejs/link';
+import { call } from '@itsrems/link';
 import { useState } from 'react';
 
 export default function Hi () {

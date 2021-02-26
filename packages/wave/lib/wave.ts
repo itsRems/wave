@@ -56,15 +56,16 @@ export class Wave {
     }
     if (!this.storage) {
       try {
-        const test = require('@pulsejs/wave-sqlite');
+        const test = require('@itsrems/wave-sqlite');
         this.storage = new Storage(test);
       } catch (error) {
         return Promise.reject(`
           It looks like you forgot to set a storage for wave. \n
-          If you're just checking us out, install @pulsejs/wave-sqlite for a seamless configuration !
+          If you're just checking us out, install @itsrems/wave-sqlite for a seamless configuration !
         `);
       }
     }
+    await this.storage.initialize();
     if (!this.cache) {
       this.cache = new Cache(this._config.cache);
     }

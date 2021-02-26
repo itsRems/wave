@@ -14,12 +14,43 @@ export class Collection <DataType = any> {
   public _defaults: DefaultsPayload;
   public _cache: boolean;
   public _cachettl: number;
+  public _data: {
+    [key: string]: DataType;
+  } = {};
+  public primaryKey: string = 'id';
   public name: string;
   public instance: () => Wave;
 
   constructor (name: string) {
     this.name = name;
     this.instance = wave;
+  }
+
+  public cache (ttl: number | false = 60, timeUnit: TimeUnits = "seconds") {
+    if (ttl) {
+      this._cachettl = toMS(ttl, timeUnit);
+      this._cache = true;
+    } else this._cache = false;
+    return this;
+  }
+
+  public create (data: DataType) {
+    this._data[data[this.primaryKey]] = data;
+  }
+
+  public defaults (defaults: DefaultsPayload) {
+    this._defaults = defaults;
+    return this;
+  }
+
+  public async findById (id: string): Promise<Data<DataType>> {
+    const value = this._data[id]; // await this.instance().storage.findById(this, id);
+    if (value) return new Data(() => this, value);
+    return undefined;
+  }
+
+  public async findByIndex (index: string, value: any) {
+
   }
 
   public model (model: {
@@ -32,29 +63,7 @@ export class Collection <DataType = any> {
     this._model = model;
     return this;
   }
-
-  public defaults (defaults: DefaultsPayload) {
-    this._defaults = defaults;
-    return this;
-  }
-
-  public cache (ttl: number | false = 60, timeUnit: TimeUnits = "seconds") {
-    if (ttl) {
-      this._cachettl = toMS(ttl, timeUnit);
-      this._cache = true;
-    } else this._cache = false;
-    return this;
-  }
-
-  public async findById (id: string): Promise<Data<DataType>> {
-    const value = await this.instance().storage.findById(this, id);
-    if (value) return new Data(value);
-    return undefined;
-  }
-
-  public async findByIndex (index: string, value: any) {
-
-  }
+  
 }
 
 /**

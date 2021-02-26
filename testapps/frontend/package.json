@@ -1,6 +1,7 @@
 {
   "name": "@itsrems/wavefrontenddemo",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -10,7 +11,7 @@
     "@pulsejs/core": "~3.5.1",
     "@pulsejs/next": "^3.5.4",
     "@pulsejs/react": "~3.5.1",
-    "@pulsejs/link": "1.0.0-alpha.0",
+    "@itsrems/link": "1.0.0-alpha.0",
     "next": "latest",
     "react": "~16.13.0",
     "react-dom": "~16.13.0",
