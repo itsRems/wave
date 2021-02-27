@@ -21,6 +21,7 @@ export class Action<PayloadType = any> {
   public instance: () => Wave;
 
   constructor (name: string) {
+    if (name.indexOf('wave_internal_') > -1) throw 'Please don\'t create collections that start with "wave_internal_"';
     this.name = name;
     const qName = makeQueueName(name);
     this.queue = new Queue(qName);

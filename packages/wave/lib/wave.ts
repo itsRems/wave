@@ -1,4 +1,3 @@
-import Queue from 'bee-queue';
 import { Action, Cache, CacheConfig, Collection, LinkConfig, LinkServer, Storage, StorageDriver } from './internal';
 
 export interface RedisConfig {
