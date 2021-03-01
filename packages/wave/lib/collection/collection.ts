@@ -69,14 +69,14 @@ export class Collection <DataType = any> {
   public async findById (id: string): Promise<Data<DataType>> {
     try {
       let key = '';
-      if (this.cache) {
+      if (this._cache) {
         key = this.makeCacheKey({ id, type: 'findById' })
         const cached = await this.instance().cache.get(key);
         if (cached) return new Data(() => this, cached);
       } 
       const value = await this.instance().storage.findById(this, id);
       if (value) {
-        if (this.cache) {
+        if (this._cache) {
           await this.instance().cache.set(key, value, {
             time: this._cachettl,
             unit: 'milliseconds'

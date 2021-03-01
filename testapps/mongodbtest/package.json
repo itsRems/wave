@@ -1,5 +1,5 @@
 {
-  "name": "@itsrems/wavebackend2",
+  "name": "@itsrems/wavemongotest",
   "version": "1.0.0",
   "main": "dist/app.js",
   "types": "dist/app.d.ts",
@@ -17,6 +17,7 @@
     "typescript": "^4.0.2"
   },
   "dependencies": {
-    "@itsrems/wave": "^1.0.0-alpha.1"
+    "@itsrems/wave": "^1.0.0-alpha.1",
+    "@itsrems/wave-mongodb": "^1.0.0-alpha.1"
   }
 }

@@ -1,4 +1,5 @@
 import { Action, Collection, Wave } from './internal';
+import { StorageDriver } from './storage';
 import { WaveConfig } from './wave';
 
 export function action <PayloadType = any> (name: string): Action<PayloadType> {
@@ -12,6 +13,10 @@ export function collection <DataType = any> (name: string): Collection<DataType>
 export function config (config: WaveConfig) {
   wave().Configure(config);
   return wave();
+}
+
+export async function setStorage (storage: StorageDriver): Wave {
+  return wave().SetStorage(storage);
 }
 
 export async function start (): Promise<Wave> {

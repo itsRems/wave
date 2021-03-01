@@ -100,7 +100,7 @@ export class Wave {
     return result;
   }
 
-  public setStorage (driver: StorageDriver): this {
+  public SetStorage (driver: StorageDriver): this {
     this.storage = new Storage(driver);
     return this;
   }

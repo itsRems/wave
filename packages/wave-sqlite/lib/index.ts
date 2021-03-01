@@ -107,8 +107,7 @@ const SqliteStorage = {
     index: string;
     value: any;
   }) {
-    const query = `SELECT * FROM "${collection.name}" WITH(INDEX("${makeIndexName(collection, payload.index)}")) WHERE ${payload.index} = ?`;
-    console.log(query);
+    const query = `SELECT * FROM "${collection.name}" WHERE ${payload.index} = ? LIMIT 1`;
     return new Promise((resolve, reject) => {
       db.all(query, [payload.value], (err, rows) => {
         if (err) return reject(err);
