@@ -46,7 +46,7 @@ async function afterStart () {
     
   // }
   try {
-    console.log(await store.find({
+    console.log(await store.findOne({
       username: 'nico'
     }))
   } catch (error) {

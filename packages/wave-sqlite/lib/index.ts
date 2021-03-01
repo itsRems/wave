@@ -84,6 +84,16 @@ const SqliteStorage = {
       })
     })
   },
+  findOne: async function (collection, match: any) {
+    const [keys, values] = [Object.keys(match), Object.values(match)];
+    const query = `SELECT * FROM "${collection.name}" WHERE ${keys.join(' = ?,')} = ? LIMIT 1`;
+    return new Promise((resolve, reject) => {
+      db.all(query, values, (err, rows) => {
+        if (err) return reject(err);
+        return resolve(rows[0]);
+      })
+    })
+  },
   findByIndex: () => undefined
 }
 

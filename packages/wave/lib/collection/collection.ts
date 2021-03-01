@@ -88,6 +88,16 @@ export class Collection <DataType = any> {
       return undefined;
     }
   }
+  
+  public async findOne (fields: Partial<DataType>): Promise<Data<DataType>> {
+    try {
+      const result = await this.instance().storage.findOne(this, fields);
+      if (!result) return undefined;
+      return new Data(() => this, result);
+    } catch (error) {
+      return undefined;
+    }
+  }
 
   public async findByIndex (index: string, value: any) {
 
