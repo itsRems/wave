@@ -77,6 +77,19 @@ export class Collection <DataType = any> {
 
   }
 
+  public async update (id: string, payload: Partial<DataType>, options?: {
+    nested?: boolean;
+  }) {
+    mergeTo(options, {
+      nested: true
+    });
+    return await this.instance().storage.updateDocument(this, {
+      updates: payload,
+      nested: options.nested,
+      id
+    });
+  }
+
   public model (model: {
     [key in keyof DataType]: [GenericModelTypes, ...Array<ModelTypes>];
   }) {

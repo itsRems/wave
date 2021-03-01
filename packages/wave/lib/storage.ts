@@ -33,7 +33,7 @@ export interface StorageDriver {
       value: any;
     }): Promise<any>;
   };
-  createTable: {
+  createTableIfNotExist: {
     (collection: Collection): Promise<void>;
   };
   deleteTable: {
@@ -70,7 +70,7 @@ export class Storage {
       }
     }
     for (const collection of this.instance()._collections) {
-      this.driver.createTable(collection);
+      this.driver.createTableIfNotExist(collection);
     }
     this.storageReady = true;
   }

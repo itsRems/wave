@@ -13,7 +13,7 @@ const SqliteStorage = {
       value TEXT NOT NULL
     )`);
   },
-  createTable: (collection) => {    
+  createTableIfNotExist: (collection) => {    
     let query = `CREATE TABLE IF NOT EXISTS "${collection.name}" `;
     const params: string[] = [];
     for (const key in collection._model) {
