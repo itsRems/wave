@@ -11,6 +11,8 @@ export interface DefaultsPayload {
   [key: string]: any;
 }
 
+type GenericFunction = () => GenericModelTypes | Promise<GenericModelTypes>;
+
 export class Collection <DataType = any> {
   public _model: ModelPayload;
   public _defaults: {
@@ -44,10 +46,10 @@ export class Collection <DataType = any> {
     return await this.instance().storage.createDocument(this, data);
   }
 
-  public defaults (defaults: {
-    [key in keyof DataType]: Promise<GenericModelTypes>;
-  }) {
-    this._defaults = defaults;
+  public defaults (defaults: Partial<{
+    [key in keyof DataType]: GenericModelTypes | GenericFunction;
+  }>) {
+    this._defaults = defaults as any; // because it's a partial
     return this;
   }
 

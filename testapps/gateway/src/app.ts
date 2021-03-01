@@ -15,13 +15,17 @@ const test = action<{
 const store = collection<{
   id: string;
   username: string;
-  test: string;
+  test?: string;
 }>('test-collection')
   .model({
     id: [String, data.PrimaryKey],
     username: [String, data.Required, data.Index],
     test: [String, data.Secret]
-  }).cache(1);
+  })
+  .defaults({
+    test: 'spooky'
+  })
+  .cache(1);
 
 async function afterStart () {
   let start = Date.now()
@@ -35,9 +39,8 @@ async function afterStart () {
   }
   try {
     store.create({
-      id: "test",
-      username: 'nico',
-      test: 'ahah'
+      id: "ahaasqsz3",
+      username: 'nico'
     });
   } catch (error) {
     
