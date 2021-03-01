@@ -15,7 +15,7 @@ export function config (config: WaveConfig) {
   return wave();
 }
 
-export async function setStorage (storage: StorageDriver): Wave {
+export function setStorage (storage: StorageDriver): Wave {
   return wave().SetStorage(storage);
 }
 
