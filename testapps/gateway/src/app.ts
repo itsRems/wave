@@ -21,10 +21,13 @@ const store = collection<{
     id: [String, data.PrimaryKey],
     username: [String, data.Required, data.Index],
     test: [String, data.Secret]
-  });
+  }).cache(1);
 
 async function afterStart () {
-  console.log(await test.call({ username: 'nico' }));
+  let start = Date.now()
+  console.log(await test.call({ username: 'nico' }), Date.now() - start);
+  start = Date.now()
+  console.log((await store.findById('test')).public(), Date.now() - start);
   try {
     store.create({
       id: "test",
@@ -34,7 +37,6 @@ async function afterStart () {
   } catch (error) {
     
   }
-  console.log((await store.findById('test')).public());
 }
 
 start();

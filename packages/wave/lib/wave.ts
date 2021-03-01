@@ -54,6 +54,9 @@ export class Wave {
       console.warn('Wave start was already called, aborting...');
       return;
     }
+    if (!this.cache) {
+      this.cache = new Cache(this._config.cache);
+    }
     if (!this.storage) {
       if (this._collections.size > 0) {
         try {
@@ -70,9 +73,6 @@ export class Wave {
       }
     }
     if (this.storage) await this.storage.initialize();
-    if (!this.cache) {
-      this.cache = new Cache(this._config.cache);
-    }
     for (const action of this._actions) {
       action.initListen();
     }

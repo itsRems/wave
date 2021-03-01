@@ -18,7 +18,8 @@ const SqliteStorage = {
     const params: string[] = [];
     for (const key in collection._model) {
       const value = collection._model[key];
-      const type = value[0] === String ? 'TEXT' : 'TEXT';
+      const p = value[0];
+      const type = p === String ? 'TEXT' : p === Number ? 'INTEGER' : 'TEXT';
       let built = `${key} ${type}`;
       if (value.includes('PrimaryKey')) built += " PRIMARY KEY";
       params.push(built);

@@ -1,3 +1,4 @@
+import { createHmac } from 'crypto';
 import { TimeUnits, toMS, Wave, wave } from '../internal';
 import { mergeTo } from '../utils';
 import { Data, GenericModelTypes, ModelTypes } from "./data";
@@ -26,7 +27,7 @@ export class Collection <DataType = any> {
     this.instance = wave;
   }
 
-  public cache (ttl: number | false = 60, timeUnit: TimeUnits = "seconds") {
+  public cache (ttl: number | false = 60, timeUnit: TimeUnits = "minutes") {
     if (ttl) {
       this._cachettl = toMS(ttl, timeUnit);
       this._cache = true;
@@ -52,8 +53,22 @@ export class Collection <DataType = any> {
 
   public async findById (id: string): Promise<Data<DataType>> {
     try {
+      let key = '';
+      if (this.cache) {
+        key = this.makeCacheKey({ id, type: 'findById' })
+        const cached = await this.instance().cache.get(key);
+        if (cached) return new Data(() => this, cached);
+      } 
       const value = await this.instance().storage.findById(this, id);
-      if (value) return new Data(() => this, value);
+      if (value) {
+        if (this.cache) {
+          await this.instance().cache.set(key, value, {
+            time: this._cachettl,
+            unit: 'milliseconds'
+          });
+        }
+        return new Data(() => this, value);
+      }
     } catch (error) {}
     return undefined;
   }
@@ -75,6 +90,13 @@ export class Collection <DataType = any> {
 
   private isFunction (func: any): boolean {
     return func && {}.toString.call(func) === '[object Function]';
+  }
+
+  private makeCacheKey (query: any) {
+    try {
+      query = JSON.stringify(query);
+    } catch (error) {}
+    return createHmac('sha256', 'cache').update(`${this.name}${query}`).digest('hex');
   }
   
 }
