@@ -19,7 +19,7 @@ const store = collection<{
 }>('test-collection')
   .model({
     id: [String, data.PrimaryKey],
-    username: [String, data.Required, data.Index],
+    username: [String, data.Required, data.Index, data.Unique],
     test: [String, data.Secret]
   })
   .defaults({
@@ -37,14 +37,15 @@ async function afterStart () {
       username: 'Nicolas'
     })
   }
-  // try {
-  //   store.create({
-  //     id: "ahaasqsz3",
-  //     username: 'nico'
-  //   });
-  // } catch (error) {
-    
-  // }
+  try {
+    await store.delete('megatest');
+    await store.create({
+      id: "megatest",
+      username: 'nicolas_thazeaeck'
+    });
+  } catch (error) {
+    console.log('te', error);
+  }
   try {
     console.log(await store.findOne({
       username: 'nico'

@@ -88,7 +88,12 @@ export class Storage {
 
   public async deleteDocument (collection: Collection, id: any) {
     if (!await this.waitInit()) return undefined;
-    return await this.driver.createDocument(collection, id);
+    return await this.driver.deleteDocument(collection, id);
+  }
+
+  public async updateDocument (collection: Collection, payload: UpdateDocPayload) {
+    if (!await this.waitInit()) return undefined;
+    return await this.driver.updateDocument(collection, payload);
   }
 
   public async findById (collection: Collection, id: string) {
@@ -104,11 +109,6 @@ export class Storage {
   public async findOne (collection: Collection, fields: Object) {
     if (!await this.waitInit()) return undefined;
     return await this.driver.findOne(collection, fields);
-  }
-
-  public async updateDocument (collection: Collection, payload: UpdateDocPayload) {
-    if (!await this.waitInit()) return undefined;
-    return await this.driver.updateDocument(collection, payload);
   }
 
   private isFunction (func: any): boolean {

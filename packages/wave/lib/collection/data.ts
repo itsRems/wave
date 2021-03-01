@@ -26,6 +26,10 @@ export class Data <DataType = any> {
     }
   }
 
+  public get value () {
+    return this._value;
+  }
+
   /**
    * Used to return a "safe" version of the data
    */

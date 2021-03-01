@@ -43,6 +43,19 @@ export class Collection <DataType = any> {
       const value = data[key];
       if (this.isFunction(value)) data[key] = await (value as any)(data);
     }
+    for (const key in this._model) {
+      const types = this._model[key];
+      if (types.includes('Unique')) {
+        let exists = undefined;
+        try {
+          const check = await this.findOne({
+            [key]: data[key]
+          } as DataType);
+          if (check) exists = { key, value: check.value[key] };
+        } catch (error) {}
+        if (exists) throw `[Wave] Found a duplicate for key ${exists.key} with value ${exists.value} on collection ${this.name} when trying to create a new document`
+      }
+    }
     return await this.instance().storage.createDocument(this, data);
   }
 
@@ -114,6 +127,10 @@ export class Collection <DataType = any> {
       nested: options.nested,
       id
     });
+  }
+
+  public async delete (id: string) {
+    return await this.instance().storage.deleteDocument(this, id);
   }
 
   public model (model: {

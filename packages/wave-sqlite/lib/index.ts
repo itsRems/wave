@@ -74,6 +74,15 @@ const SqliteStorage = {
       });
     });
   },
+  deleteDocument: async function (collection, id) {
+    const query = `DELETE FROM "${collection.name}" WHERE ${collection.primaryKey} = ?`;
+   return new Promise((resolve, reject) => {
+      db.run(query, [id], (err) => {
+        if (err) return reject(err);
+        return resolve(true);
+      });
+    })
+  },
   find: async function (collection, match: any) {
     const [keys, values] = [Object.keys(match), Object.values(match)];
     const query = `SELECT * FROM "${collection.name}" WHERE ${keys.join(' = ?,')} = ?`;
