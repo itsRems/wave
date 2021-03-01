@@ -54,6 +54,26 @@ const SqliteStorage = {
       });
     });
   },
+  updateDocument: async function (collection, payload: {
+    id: string;
+    updates: Object;
+    nested?: boolean;
+  }) {
+    const values = Object.values(payload.updates);
+    let query = `UPDATE "${collection.name}" SET `;
+    const adds: string[] = [];
+    for (const key in payload.updates) {
+      adds.push(`${key} = ?`);
+    }
+    query += adds.join(', ');
+    query += ` WHERE ${collection.primaryKey}=?`;
+    return new Promise((resolve, reject) => {
+      db.run(query, [...values, ...[payload.id]], (err) => {
+        if (err) return reject(err);
+        else return resolve(true);
+      });
+    });
+  },
   findByIndex: () => undefined
 }
 

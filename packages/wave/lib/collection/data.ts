@@ -1,3 +1,4 @@
+import { mergeTo } from "../utils";
 import { Collection } from "./collection";
 
 export type GenericModelTypes = String | Array<any> | Object;
@@ -31,5 +32,18 @@ export class Data <DataType = any> {
     const copy = { ...this._value };
     Object.keys(copy).forEach((key) => (this._secrets.includes(key) && delete copy[key]));
     return copy;
+  }
+
+  public async update (payload: Partial<DataType>, options?: {
+    nested?: boolean;
+  }) {
+    options = mergeTo(options, {
+      nested: true
+    });
+    return await this.collection().instance().storage.updateDocument(this.collection(), {
+      updates: payload,
+      nested: options.nested,
+      id: this._value[this.collection().primaryKey]
+    });
   }
 }

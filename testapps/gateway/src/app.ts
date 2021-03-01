@@ -26,8 +26,13 @@ const store = collection<{
 async function afterStart () {
   let start = Date.now()
   console.log(await test.call({ username: 'nico' }), Date.now() - start);
-  start = Date.now()
-  console.log((await store.findById('test')).public(), Date.now() - start);
+  const user = await store.findById('test');
+  if (user) {
+    console.log(user.public());
+    user.update({
+      username: 'Nicolas'
+    })
+  }
   try {
     store.create({
       id: "test",
