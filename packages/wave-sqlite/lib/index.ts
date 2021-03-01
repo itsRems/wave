@@ -76,7 +76,7 @@ const SqliteStorage = {
   },
   deleteDocument: async function (collection, id) {
     const query = `DELETE FROM "${collection.name}" WHERE ${collection.primaryKey} = ?`;
-   return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       db.run(query, [id], (err) => {
         if (err) return reject(err);
         return resolve(true);
@@ -103,7 +103,16 @@ const SqliteStorage = {
       })
     })
   },
-  findByIndex: () => undefined
+  findByIndex: () => undefined,
+  createIndex: async function (collection, indexKey) {
+    const query = `CREATE INDEX IF NOT EXISTS "${collection.name}-${indexKey}-index" ON "${collection.name}" (${indexKey}) `;
+    return new Promise((resolve, reject) => {
+      db.run(query, (err) => {
+        if (err) return reject(err);
+        return resolve(true);
+      });
+    });
+  }
 }
 
 export default SqliteStorage;

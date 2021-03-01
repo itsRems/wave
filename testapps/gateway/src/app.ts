@@ -28,8 +28,6 @@ const store = collection<{
   .cache(1);
 
 async function afterStart () {
-  let start = Date.now()
-  console.log(await test.call({ username: 'nico' }), Date.now() - start);
   const user = await store.findById('test');
   if (user) {
     console.log(user.public());
@@ -41,7 +39,7 @@ async function afterStart () {
     await store.delete('megatest');
     await store.create({
       id: "megatest",
-      username: 'nicolas_thazeaeck'
+      username: 'nicolas_theck'
     });
   } catch (error) {
     console.log('te', error);

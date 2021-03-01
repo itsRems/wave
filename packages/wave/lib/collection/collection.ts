@@ -136,10 +136,6 @@ export class Collection <DataType = any> {
   public model (model: {
     [key in keyof DataType]: [GenericModelTypes, ...Array<ModelTypes>];
   }) {
-    for (const key in model) {
-      const value = model[key];
-      console.log(key, value);
-    }
     this._model = model;
     return this;
   }

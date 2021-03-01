@@ -76,9 +76,15 @@ export class Storage {
       }
     }
     for (const collection of this.instance()._collections) {
-      this.driver.createTableIfNotExist(collection);
+      await this.driver.createTableIfNotExist(collection);
+      const model = collection._model;
+      for (const key in model) {
+        const types = model[key];
+        if (types.includes('Index')) await this.driver.createIndex(collection, key);
+      }
     }
     this.storageReady = true;
+    console.log('[Wave] Storage is ready and initialized !');
   }
 
   public async createDocument (collection: Collection, payload: Object) {
