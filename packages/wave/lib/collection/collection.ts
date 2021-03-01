@@ -1,4 +1,5 @@
 import { TimeUnits, toMS, Wave, wave } from '../internal';
+import { mergeTo } from '../utils';
 import { Data, GenericModelTypes, ModelTypes } from "./data";
 
 export interface ModelPayload {
@@ -11,7 +12,9 @@ export interface DefaultsPayload {
 
 export class Collection <DataType = any> {
   public _model: ModelPayload;
-  public _defaults: DefaultsPayload;
+  public _defaults: {
+    [key in keyof DataType]: GenericModelTypes|Function|Promise<GenericModelTypes>;
+  };
   public _cache: boolean;
   public _cachettl: number;
   public _data: {
@@ -34,11 +37,18 @@ export class Collection <DataType = any> {
     return this;
   }
 
-  public create (data: DataType) {
+  public async create (data: DataType) {
+    data = mergeTo(data, this._defaults as DataType);
+    for (const key in data) {
+      const value = data[key];
+      if (this.isFunction(value)) data[key] = await (value as any)();
+    }
     this._data[data[this.primaryKey]] = data;
   }
 
-  public defaults (defaults: DefaultsPayload) {
+  public defaults (defaults: {
+    [key in keyof DataType]: Promise<GenericModelTypes>;
+  }) {
     this._defaults = defaults;
     return this;
   }
@@ -62,6 +72,10 @@ export class Collection <DataType = any> {
     }
     this._model = model;
     return this;
+  }
+
+  private isFunction (func: any): boolean {
+    return func && {}.toString.call(func) === '[object Function]';
   }
   
 }

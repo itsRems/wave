@@ -1,6 +1,12 @@
 import { Collection, Wave, wave } from "./internal";
 import { mergeTo } from "./utils";
 
+interface UpdateDocPayload {
+  id: string;
+  updates: Object;
+  nested?: boolean;
+};
+
 export interface StorageDriver {
   usesJson?: boolean;
   initialize: {
@@ -13,11 +19,7 @@ export interface StorageDriver {
     (collection: Collection, document: Object): Promise<void>;
   };
   updateDocument: {
-    (collection: Collection, payload: {
-      query: Object;
-      updates: Object;
-      nested?: boolean;
-    }): Promise<any>;
+    (collection: Collection, payload: UpdateDocPayload): Promise<any>;
   };
   deleteDocument: {
     (collection: Collection, id: string): Promise<void>;
@@ -60,16 +62,52 @@ export class Storage {
   public async initialize () {
     if (!this.isFunction(this.driver.initialize)) throw 'The driver\'s initialize function is not valid ! Aborting...';
     await this.driver.initialize(this.instance());
-    if (this.isFunction(this.driver.doMigrations)) this.driver.doMigrations(Array.from(this.instance()._collections));
+    if (this.isFunction(this.driver.doMigrations)) {
+      try {
+        this.driver.doMigrations(Array.from(this.instance()._collections));
+      } catch (error) {
+        console.error('[Wave] The storage driver returned an error on migrations:', error);
+      }
+    }
     this.storageReady = true;
   }
 
+  public async create (collection: Collection, payload: Object) {
+    if (!await this.waitInit()) return undefined;
+    return await this.driver.createDocument(collection, payload);
+  }
+
+  public async deleteDocument (collection: Collection, id: any) {
+    if (!await this.waitInit()) return undefined;
+    return await this.driver.createDocument(collection, id);
+  }
+
   public async findById (collection: Collection, id: string) {
-    if (!this.storageReady) return undefined;
+    if (!await this.waitInit()) return undefined;
     return await this.driver.findById(collection, id);
+  }
+
+  public async updateDocument (collection: Collection, payload: UpdateDocPayload) {
+    if (!await this.waitInit()) return undefined;
+    return await this.driver.updateDocument(collection, payload);
   }
 
   private isFunction (func: any): boolean {
     return func && {}.toString.call(func) === '[object Function]';
+  }
+
+  private async waitInit (tries = 25) {
+    return await new Promise((resolve) => {
+      let int = undefined;
+      let attempt = 0;
+      const checkInit = () => {
+        if (this.storageReady || attempt >= tries) {
+          clearInterval(int);
+          return resolve(true);
+        }
+        attempt++;
+      }
+      int = setInterval(checkInit, 50);
+    });
   }
 }
