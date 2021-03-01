@@ -105,7 +105,7 @@ const SqliteStorage = {
   },
   findByIndex: () => undefined,
   createIndex: async function (collection, indexKey) {
-    const query = `CREATE INDEX IF NOT EXISTS "${collection.name}-${indexKey}-index" ON "${collection.name}" (${indexKey}) `;
+    const query = `CREATE INDEX IF NOT EXISTS "${collection.name}-${indexKey}-wave-index" ON "${collection.name}" (${indexKey}) `;
     return new Promise((resolve, reject) => {
       db.run(query, (err) => {
         if (err) return reject(err);
