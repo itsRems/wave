@@ -28,6 +28,7 @@ const store = collection<{
   .cache(1);
 
 async function afterStart () {
+  await store.findByIndex('username', 'nico');
   const user = await store.findById('test');
   if (user) {
     console.log(user.public());

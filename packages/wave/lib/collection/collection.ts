@@ -112,8 +112,8 @@ export class Collection <DataType = any> {
     }
   }
 
-  public async findByIndex (index: string, value: any) {
-
+  public async findByIndex (index: keyof DataType, value: any) {
+    console.log(await this.instance().storage.findByIndex(this, String(index), value));
   }
 
   public async update (id: string, payload: Partial<DataType>, options?: {

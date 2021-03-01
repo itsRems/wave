@@ -103,9 +103,21 @@ const SqliteStorage = {
       })
     })
   },
-  findByIndex: () => undefined,
+  findByIndex: async function (collection, payload: {
+    index: string;
+    value: any;
+  }) {
+    const query = `SELECT * FROM "${collection.name}" WITH(INDEX("${makeIndexName(collection, payload.index)}")) WHERE ${payload.index} = ?`;
+    console.log(query);
+    return new Promise((resolve, reject) => {
+      db.all(query, [payload.value], (err, rows) => {
+        if (err) return reject(err);
+        return resolve(rows[0]);
+      })
+    });
+  },
   createIndex: async function (collection, indexKey) {
-    const query = `CREATE INDEX IF NOT EXISTS "${collection.name}-${indexKey}-wave-index" ON "${collection.name}" (${indexKey}) `;
+    const query = `CREATE INDEX IF NOT EXISTS "${makeIndexName(collection, indexKey)}" ON "${collection.name}" (${indexKey}) `;
     return new Promise((resolve, reject) => {
       db.run(query, (err) => {
         if (err) return reject(err);
@@ -113,6 +125,10 @@ const SqliteStorage = {
       });
     });
   }
+}
+
+function makeIndexName (collection, indexKey) {
+  return `${collection.name}-${indexKey}-wave-index`;
 }
 
 export default SqliteStorage;

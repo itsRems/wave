@@ -107,6 +107,13 @@ export class Storage {
     return await this.driver.findById(collection, id);
   }
 
+  public async findByIndex (collection: Collection, index: string, value: string) {
+    if (!await this.waitInit()) return undefined;
+    return await this.driver.findByIndex(collection, {
+      index, value
+    });
+  }
+
   public async find (collection: Collection, fields: Object) {
     if (!await this.waitInit()) return undefined;
     return await this.driver.find(collection, fields);
