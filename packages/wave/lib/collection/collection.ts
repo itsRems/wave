@@ -17,9 +17,6 @@ export class Collection <DataType = any> {
   };
   public _cache: boolean;
   public _cachettl: number;
-  public _data: {
-    [key: string]: DataType;
-  } = {};
   public primaryKey: string = 'id';
   public name: string;
   public instance: () => Wave;
@@ -41,9 +38,9 @@ export class Collection <DataType = any> {
     data = mergeTo(data, this._defaults as DataType);
     for (const key in data) {
       const value = data[key];
-      if (this.isFunction(value)) data[key] = await (value as any)();
+      if (this.isFunction(value)) data[key] = await (value as any)(data);
     }
-    this._data[data[this.primaryKey]] = data;
+    return await this.instance().storage.createDocument(this, data);
   }
 
   public defaults (defaults: {
@@ -54,8 +51,10 @@ export class Collection <DataType = any> {
   }
 
   public async findById (id: string): Promise<Data<DataType>> {
-    const value = this._data[id]; // await this.instance().storage.findById(this, id);
-    if (value) return new Data(() => this, value);
+    try {
+      const value = await this.instance().storage.findById(this, id);
+      if (value) return new Data(() => this, value);
+    } catch (error) {}
     return undefined;
   }
 

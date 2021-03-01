@@ -69,10 +69,13 @@ export class Storage {
         console.error('[Wave] The storage driver returned an error on migrations:', error);
       }
     }
+    for (const collection of this.instance()._collections) {
+      this.driver.createTable(collection);
+    }
     this.storageReady = true;
   }
 
-  public async create (collection: Collection, payload: Object) {
+  public async createDocument (collection: Collection, payload: Object) {
     if (!await this.waitInit()) return undefined;
     return await this.driver.createDocument(collection, payload);
   }

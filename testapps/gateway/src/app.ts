@@ -25,11 +25,15 @@ const store = collection<{
 
 async function afterStart () {
   console.log(await test.call({ username: 'nico' }));
-  store.create({
-    id: 'test',
-    username: 'nico',
-    test: 'ahah'
-  });
+  try {
+    store.create({
+      id: "test",
+      username: 'nico',
+      test: 'ahah'
+    });
+  } catch (error) {
+    
+  }
   console.log((await store.findById('test')).public());
 }
 
