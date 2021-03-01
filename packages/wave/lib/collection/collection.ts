@@ -75,6 +75,20 @@ export class Collection <DataType = any> {
     return undefined;
   }
 
+  public async find (fields: Partial<DataType>): Promise<Data<DataType>[]> {
+    try {
+      const results = await this.instance().storage.find(this, fields);
+      if (!results) return undefined;
+      const datas: Data<DataType>[] = [];
+      for (const value of results) {
+        datas.push(new Data(() => this, value));
+      }
+      return datas;
+    } catch (error) {
+      return undefined;
+    }
+  }
+
   public async findByIndex (index: string, value: any) {
 
   }

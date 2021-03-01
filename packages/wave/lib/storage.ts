@@ -33,6 +33,9 @@ export interface StorageDriver {
       value: any;
     }): Promise<any>;
   };
+  find: {
+    (collection: Collection, payload: any): Promise<any[]>;
+  }
   createTableIfNotExist: {
     (collection: Collection): Promise<void>;
   };
@@ -88,6 +91,11 @@ export class Storage {
   public async findById (collection: Collection, id: string) {
     if (!await this.waitInit()) return undefined;
     return await this.driver.findById(collection, id);
+  }
+
+  public async find (collection: Collection, fields: Object) {
+    if (!await this.waitInit()) return undefined;
+    return await this.driver.find(collection, fields);
   }
 
   public async updateDocument (collection: Collection, payload: UpdateDocPayload) {

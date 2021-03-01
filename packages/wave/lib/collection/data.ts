@@ -7,7 +7,8 @@ export const ModelTypes = {
   PrimaryKey: 'PrimaryKey',
   Required: 'Required',
   Secret: 'Secret',
-  Index: 'Index'
+  Index: 'Index',
+  Unique: 'Unique'
 } as const;
 
 export type ModelTypes = typeof ModelTypes[keyof typeof ModelTypes];

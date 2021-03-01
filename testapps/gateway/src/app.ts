@@ -37,11 +37,18 @@ async function afterStart () {
       username: 'Nicolas'
     })
   }
+  // try {
+  //   store.create({
+  //     id: "ahaasqsz3",
+  //     username: 'nico'
+  //   });
+  // } catch (error) {
+    
+  // }
   try {
-    store.create({
-      id: "ahaasqsz3",
+    console.log(await store.find({
       username: 'nico'
-    });
+    }))
   } catch (error) {
     
   }

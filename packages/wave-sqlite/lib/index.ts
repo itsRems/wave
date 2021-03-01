@@ -74,6 +74,16 @@ const SqliteStorage = {
       });
     });
   },
+  find: async function (collection, match: any) {
+    const [keys, values] = [Object.keys(match), Object.values(match)];
+    const query = `SELECT * FROM "${collection.name}" WHERE ${keys.join(' = ?,')} = ?`;
+    return new Promise((resolve, reject) => {
+      db.all(query, values, (err, rows) => {
+        if (err) return reject(err);
+        return resolve(rows);
+      })
+    })
+  },
   findByIndex: () => undefined
 }
 
