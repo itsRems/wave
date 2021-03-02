@@ -15,7 +15,7 @@ const store = collection<{
   age: function () {
     return Math.floor(Math.random() * 100);
   }
-})
+}).cache(5);
 
 async function afterStart () {
   // await store.create({
@@ -23,7 +23,9 @@ async function afterStart () {
   //   username: 'nico',
   //   superfield: 'pog'
   // })
-  console.log(await store.findById('test'));
+  console.log(await (await store.findById('test')).update({
+    username: 'nicoooo'
+  }));
 }
 
 const storage = new WaveMongoDB("mongodb://root:password@127.0.0.1:27017/?poolSize=20&writeConcern=majority");

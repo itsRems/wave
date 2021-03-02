@@ -54,21 +54,17 @@ const SqliteStorage = {
       });
     });
   },
-  updateDocument: async function (collection, payload: {
-    id: string;
-    updates: Object;
-    nested?: boolean;
-  }) {
-    const values = Object.values(payload.updates);
+  updateDocument: async function (collection, id, updates) {
+    const values = Object.values(updates);
     let query = `UPDATE "${collection.name}" SET `;
     const adds: string[] = [];
-    for (const key in payload.updates) {
+    for (const key in updates) {
       adds.push(`${key} = ?`);
     }
     query += adds.join(', ');
     query += ` WHERE ${collection.primaryKey}=?`;
     return new Promise((resolve, reject) => {
-      db.run(query, [...values, ...[payload.id]], (err) => {
+      db.run(query, [...values, ...[id]], (err) => {
         if (err) return reject(err);
         else return resolve(true);
       });

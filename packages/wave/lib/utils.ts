@@ -49,3 +49,21 @@ export function toMS (time: number, unit: TimeUnits): number {
 export function mergeTo<T>(target: T, defaults: Partial<T>): T {
   return { ...defaults, ...target };
 }
+
+export function deepMerge<T>(...objects: Object[]): T {
+  const isObject = obj => obj && typeof obj === 'object';
+  // @ts-ignore because of the type (:
+  return objects.reduce((previous, current) => {
+    for (const key in current) {
+      const [pVal, cVal] = [previous[key], current[key]];
+      if (Array.isArray(pVal) && Array.isArray(cVal)) {
+        previous[key] = pVal.concat(...cVal);
+      } else if (isObject(pVal) && isObject(cVal)) {
+        previous[key] = deepMerge(pVal, cVal);
+      } else {
+        previous[key] = cVal;
+      }
+      return previous;
+    };
+  });
+}

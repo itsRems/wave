@@ -1,12 +1,6 @@
 import { Collection, Wave, wave } from "./internal";
 import { mergeTo } from "./utils";
 
-interface UpdateDocPayload {
-  id: string;
-  updates: Object;
-  nested?: boolean;
-};
-
 export interface StorageDriver {
   usesJson?: boolean;
   initialize: {
@@ -19,7 +13,7 @@ export interface StorageDriver {
     (collection: Collection, document: Object): Promise<void>;
   };
   updateDocument: {
-    (collection: Collection, payload: UpdateDocPayload): Promise<any>;
+    (collection: Collection, id: string, updates: Object): Promise<any>;
   };
   deleteDocument: {
     (collection: Collection, id: string): Promise<void>;
@@ -97,9 +91,9 @@ export class Storage {
     return await this.driver.deleteDocument(collection, id);
   }
 
-  public async updateDocument (collection: Collection, payload: UpdateDocPayload) {
+  public async updateDocument (collection: Collection, id: string, updates: Object) {
     if (!await this.waitInit()) return undefined;
-    return await this.driver.updateDocument(collection, payload);
+    return await this.driver.updateDocument(collection, id, updates);
   }
 
   public async findById (collection: Collection, id: string) {

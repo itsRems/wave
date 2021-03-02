@@ -19,11 +19,7 @@ export class Data <DataType = any> {
 
   constructor (public collection: () => Collection<DataType>, data: DataType) {
     this._value = data;
-    const model = this.collection()._model;
-    for (const key in model) {
-      const types = model[key];
-      if (types.includes('Secret') && !this._secrets.includes(key)) this._secrets.push(key);
-    }
+    this.refreshSecrets();
   }
 
   public get value () {
@@ -31,7 +27,7 @@ export class Data <DataType = any> {
   }
 
   /**
-   * Used to return a "safe" version of the data
+   * Used to return a "safe" version of the data by removing any key that includes "Secret" in the model
    */
   public public () {
     const copy = { ...this._value };
@@ -45,10 +41,16 @@ export class Data <DataType = any> {
     options = mergeTo(options, {
       nested: true
     });
-    return await this.collection().instance().storage.updateDocument(this.collection(), {
-      updates: payload,
-      nested: options.nested,
-      id: this._value[this.collection().primaryKey]
-    });
+    await this.collection().update(this._value[this.collection().primaryKey], payload);
+    this.refreshSecrets();
+  }
+
+  private refreshSecrets () {
+    this._secrets = [];
+    const model = this.collection()._model;
+    for (const key in model) {
+      const types = model[key];
+      if (types.includes('Secret') && !this._secrets.includes(key)) this._secrets.push(key);
+    }
   }
 }

@@ -50,11 +50,26 @@ export class WaveMongoDB {
     return result;
   }
 
+  private async updateDocument (collection, id, updates) {
+    const dbCol = this.db.collection(collection.name);
+    const query = this.options.replaceMongoId ? {
+      _id: id
+    } : {
+      [collection.primaryKey]: id
+    }
+    if (this.options.replaceMongoId) delete updates[collection.primaryKey];
+    else delete updates._id;
+    await dbCol.updateOne(query, {
+      $set: updates
+    }, { upsert: true });
+  }
+
   public export (): any {
     return {
       initialize: () => this.initialize(),
       createTableIfNotExist: () => (true),
       createDocument: async (collection, data) => (await this.createOne(collection, data)),
+      updateDocument: async (collection, id, updates) => (await this.updateDocument(collection, id, updates)),
       findById: async (collection, id) => (await this.findById(collection, id))
     }
   }

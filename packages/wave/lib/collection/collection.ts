@@ -1,6 +1,6 @@
 import { createHmac } from 'crypto';
 import { TimeUnits, toMS, Wave, wave } from '../internal';
-import { mergeTo } from '../utils';
+import { deepMerge, mergeTo } from '../utils';
 import { Data, GenericModelTypes, ModelTypes } from "./data";
 
 export interface ModelPayload {
@@ -38,7 +38,7 @@ export class Collection <DataType = any> {
   }
 
   public async create (data: DataType) {
-    data = mergeTo(data, this._defaults as DataType);
+    data = deepMerge<DataType>(data, this._defaults);
     for (const key in data) {
       const value = data[key];
       if (this.isFunction(value)) data[key] = await (value as any)(data);
@@ -70,7 +70,7 @@ export class Collection <DataType = any> {
     try {
       let key = '';
       if (this._cache) {
-        key = this.makeCacheKey({ id, type: 'findById' })
+        key = this.makeCacheKey({ id, type: 'findById' });
         const cached = await this.instance().cache.get(key);
         if (cached) return new Data(() => this, cached);
       } 
@@ -118,15 +118,19 @@ export class Collection <DataType = any> {
 
   public async update (id: string, payload: Partial<DataType>, options?: {
     nested?: boolean;
-  }) {
-    mergeTo(options, {
+  }): Promise<DataType> {
+    options = mergeTo(options, {
       nested: true
     });
-    return await this.instance().storage.updateDocument(this, {
-      updates: payload,
-      nested: options.nested,
-      id
-    });
+    if (options.nested) {
+      try {
+        const original = (await this.findById(id)).value;
+        payload = deepMerge(original, payload) as DataType;
+      } catch (error) {}
+    }
+    await this.instance().storage.updateDocument(this, id, payload);
+    await this.resetCache();
+    return undefined;
   }
 
   public async delete (id: string) {
@@ -148,7 +152,27 @@ export class Collection <DataType = any> {
     try {
       query = JSON.stringify(query);
     } catch (error) {}
-    return createHmac('sha256', 'cache').update(`${this.name}${query}`).digest('hex');
+    return `${this.instance()._config.cache?.prefix || 'wave_cache'}_${this.name}_${createHmac('sha256', 'cache').update(`${this.name}${query}`).digest('hex')}`;
+  }
+
+  private async resetCache () {
+    return new Promise((resolve) => {
+      const match = `*${this.instance()._config.cache?.prefix || 'wave_cache'}_${this.name}*`;
+      const stream = this.instance().cache.client.scanStream({
+        match
+      });
+      const pipeline = this.instance().cache.client.pipeline();
+      stream.on('data', (keys) => {
+        if (keys.length) {
+          keys.forEach((key) => pipeline.del(key));
+          pipeline.exec();
+        }
+      });
+      stream.on('end', async () => {
+        await pipeline.exec();
+        return resolve(true);
+      });
+    })
   }
   
 }
