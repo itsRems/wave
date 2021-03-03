@@ -1,4 +1,5 @@
-import { action, collection, data, start } from '@itsrems/wave';
+import { action, auto, collection, data, start } from '@itsrems/wave';
+import { join } from 'path';
 
 const test = action<{
   username: string;
@@ -56,3 +57,5 @@ async function afterStart () {
 
 start();
 afterStart();
+
+auto.controllers(join(__dirname, './controllers'));
