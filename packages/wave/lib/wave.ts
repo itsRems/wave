@@ -49,7 +49,7 @@ export class Wave {
     return collection;
   }
 
-  public Controller (config: ControllerConfig): Controller {
+  public Controller (config: Partial<ControllerConfig>): Controller {
     return new Controller(config);
   }
 

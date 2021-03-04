@@ -15,7 +15,7 @@ export function config (config: WaveConfig) {
   return wave();
 }
 
-export function controller (config: ControllerConfig): Controller {
+export function controller (config: Partial<ControllerConfig>): Controller {
   return wave().Controller(config);
 }
  
