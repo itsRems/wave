@@ -37,6 +37,10 @@ export class Collection <DataType = any> {
     return this;
   }
 
+  /**
+   * 
+   * @param data 
+   */
   public async create (data: Partial<DataType>) {
     data = deepMerge<DataType>(data, this._defaults);
     for (const key in data) {
