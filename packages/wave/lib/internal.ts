@@ -4,6 +4,8 @@ export { Cache, CacheConfig } from './cache';
 
 export { Collection, data, ModelPayload } from './collection';
 
+export * from './controller';
+
 export { RedisConfig, Wave } from './wave';
 
 export { LinkConfig, LinkServer } from './link';

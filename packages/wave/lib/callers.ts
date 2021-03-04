@@ -1,4 +1,4 @@
-import { Action, Collection, Wave } from './internal';
+import { Action, Collection, Controller, ControllerConfig, Wave } from './internal';
 import { StorageDriver } from './storage';
 import { WaveConfig } from './wave';
 
@@ -15,6 +15,10 @@ export function config (config: WaveConfig) {
   return wave();
 }
 
+export function controller (config: ControllerConfig): Controller {
+  return wave().Controller(config);
+}
+ 
 export function setStorage (storage: StorageDriver): Wave {
   return wave().SetStorage(storage);
 }

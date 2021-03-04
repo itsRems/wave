@@ -1,4 +1,4 @@
-import { Action, Cache, CacheConfig, Collection, LinkConfig, LinkServer, Storage, StorageDriver } from './internal';
+import { Action, Cache, CacheConfig, Collection, Controller, ControllerConfig, LinkConfig, LinkServer, Storage, StorageDriver } from './internal';
 
 export interface RedisConfig {
   host: string;
@@ -47,6 +47,10 @@ export class Wave {
     const collection = new Collection<DataType>(name);
     this._collections.add(collection);
     return collection;
+  }
+
+  public Controller (config: ControllerConfig): Controller {
+    return new Controller(config);
   }
 
   public async Start () {
