@@ -1,4 +1,4 @@
-import { Collection } from './internal';
+import { Action, Collection } from './internal';
 
 export type FuncObj = { [key: string]: (...args: any) => any };
 export type EventObj = { [key: string]: Event };
@@ -10,7 +10,9 @@ export interface ControllerConfig {
   root: { [key: string]: any };
   collection: Collection<any>;
   collections: { [key: string]: Collection<any> };
-  actions: FuncObj;
+  actions: {
+    [key: string]: Action
+  };
   helpers: FuncObj;
 }
 
