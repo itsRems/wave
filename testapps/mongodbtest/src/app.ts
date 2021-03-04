@@ -18,14 +18,14 @@ const store = collection<{
 }).cache(5);
 
 async function afterStart () {
-  // await store.create({
-  //   id: 'test',
-  //   username: 'nico',
-  //   superfield: 'pog'
-  // })
-  console.log(await (await store.findById('test')).update({
-    username: 'nicoooo'
-  }));
+  await store.create({
+    id: 'testz4zzz',
+    username: 'nico',
+    superfield: 'pog'
+  })
+  // console.log(await (await store.findById('test')).update({
+  //   username: 'nicoooo'
+  // }));
 }
 
 const storage = new WaveMongoDB("mongodb://root:password@127.0.0.1:27017/?poolSize=20&writeConcern=majority");

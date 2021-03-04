@@ -41,7 +41,7 @@ export class Collection <DataType = any> {
    * 
    * @param data 
    */
-  public async create (data: Partial<DataType>) {
+  public async create (data: Partial<DataType>): Promise<Data<DataType>> {
     data = deepMerge<DataType>(data, this._defaults);
     for (const key in data) {
       const value = data[key];
@@ -60,8 +60,8 @@ export class Collection <DataType = any> {
         if (exists) throw `[Wave] Found a duplicate for key ${exists.key} with value ${exists.value} on collection ${this.name} when trying to create a new document`
       }
     }
-    const doc = await this.instance().storage.createDocument(this, data);
-    return new Data(() => this, doc);
+    const id = await this.instance().storage.createDocument(this, data);
+    return await this.findById(id);
   }
 
   public defaults (defaults: Partial<{

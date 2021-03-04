@@ -39,9 +39,9 @@ const SqliteStorage = {
     values.forEach(() => query += query.endsWith('?') ? ',?' : '?');
     query += ')';
     return new Promise((resolve, reject) => {
-      db.run(query, values, (err) => {
+      db.run(query, values, function (err) {
         if (err) return reject(err);
-        else return resolve(true);
+        else return resolve(this.lastID);
       });
     });
   },

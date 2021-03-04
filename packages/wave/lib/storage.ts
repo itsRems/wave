@@ -10,7 +10,7 @@ export interface StorageDriver {
     (collections: Collection[]): Promise<void>;
   };
   createDocument: {
-    (collection: Collection, document: Object): Promise<void>;
+    (collection: Collection, document: Object): Promise<string>;
   };
   updateDocument: {
     (collection: Collection, id: string, updates: Object): Promise<any>;

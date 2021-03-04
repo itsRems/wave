@@ -14,7 +14,9 @@ export class WaveMongoDB {
       replaceMongoId: true,
       ...options
     }
-    this.client = new MongoClient(this.uri);
+    this.client = new MongoClient(this.uri, {
+      useUnifiedTopology: true
+    });
   }
 
   private async initialize () {
@@ -30,8 +32,7 @@ export class WaveMongoDB {
       data._id = data[collection.primaryKey];
       delete data[collection.primaryKey];
     }
-    await dbCol.insertOne(data);
-    return true;
+    return (await dbCol.insertOne(data)).insertedId;
   }
 
   private async findById (collection, id) {
