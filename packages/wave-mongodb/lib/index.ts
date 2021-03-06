@@ -65,13 +65,25 @@ export class WaveMongoDB {
     }, { upsert: true });
   }
 
+  private async findOne (collection, fields) {
+    const dbCol = this.db.collection(collection.name);
+    const result = await dbCol.findOne(fields);
+    if (!result) return undefined;
+    if (this.options.replaceMongoId) {
+      result[collection.primaryKey] = result._id;
+      delete result._id;
+    }
+    return result;
+  }
+
   public export (): any {
     return {
       initialize: () => this.initialize(),
       createTableIfNotExist: () => (true),
       createDocument: async (collection, data) => (await this.createOne(collection, data)),
       updateDocument: async (collection, id, updates) => (await this.updateDocument(collection, id, updates)),
-      findById: async (collection, id) => (await this.findById(collection, id))
+      findById: async (collection, id) => (await this.findById(collection, id)),
+      findOne: async (collection, query) => (await this.findOne(collection, query))
     }
   }
 }
