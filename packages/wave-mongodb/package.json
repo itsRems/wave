@@ -1,6 +1,6 @@
 {
   "name": "@itsrems/wave-mongodb",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.11",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "git@github.com:itsRems/pulse-wave",
