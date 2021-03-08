@@ -1,5 +1,6 @@
 export interface LinkConfig {
-  uri?: string;
+  uri: string;
+  reconnectInterval: number;
 }
 
 export interface ActionReturn {
@@ -15,21 +16,33 @@ export class Link {
   public ready: boolean;
   public config: LinkConfig;
 
-  constructor (config?: LinkConfig) {
+  constructor (config?: Partial<LinkConfig>) {
     this.config = {
       uri: 'ws://localhost:1500',
+      reconnectInterval: 1500,
       ...config
     }
+    this.connect();
+  }
+
+  private connect () {
     this._ws = new WebSocket(this.config.uri);
     this._ws.onopen = () => {
       this.ready = true;
+    }
+    this._ws.onclose = () => {
+      this.ready = false;
+      setTimeout(() => this.connect, this.config.reconnectInterval);
     }
     this.Listen();
     this.globalBind();
   }
 
-  public Configure (config: LinkConfig) {
-    this.config = config;
+  public Configure (config: Partial<LinkConfig>) {
+    this.config = {
+      ...this.config,
+      ...config
+    };
   }
 
   public async Call (action: string, payload: any): Promise<ActionReturn> {
