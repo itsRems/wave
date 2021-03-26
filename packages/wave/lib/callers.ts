@@ -23,6 +23,10 @@ export function setStorage (storage: StorageDriver): Wave {
   return wave().SetStorage(storage);
 }
 
+export function setGlobalCatch (func: (error: any) => void): Wave {
+  return wave().SetGlobalCatch(func);
+}
+
 export async function start (): Promise<Wave> {
   return await wave().Start();
 }
