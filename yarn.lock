@@ -253,6 +253,11 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.1.1.tgz#9daf5745156fd84b8e9889a2dc721f0c58e894aa"
   integrity sha512-CAEbWH7OIur6jEOzaai83jq3FmKmv4PmX1JYfs9IrYcGEVI/lyL1EXJGCj7eFVJ0bg5QR8LMxBlEtA+xKiLpFw==
 
+"@itsrems/link@1.0.0-alpha.1":
+  version "1.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@itsrems/link/-/link-1.0.0-alpha.1.tgz#2af6a403a78df1f4ccac731ec02f5a09c4c07004"
+  integrity sha512-8c/Kn83Y6VIA8O57p5vKOV61/qxm88IcpjssINasrcpNxhJ5jpnmUhSwaXIRNfeXfxKNsjg0c/h/910RA2HAsA==
+
 "@lerna/add@3.21.0":
   version "3.21.0"
   resolved "https://registry.yarnpkg.com/@lerna/add/-/add-3.21.0.tgz#27007bde71cc7b0a2969ab3c2f0ae41578b4577b"

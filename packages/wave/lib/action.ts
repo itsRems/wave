@@ -16,6 +16,7 @@ export interface ProcessFunc<PayloadType> {
 export class Action<PayloadType = any> {
   public name: string;
   public func: Function;
+  public catchFunc: Function;
   public queue: Queue;
   public _cache: false | number = false;
   public instance: () => Wave;
@@ -29,7 +30,7 @@ export class Action<PayloadType = any> {
     return this;
   }
 
-  public process (callback: ProcessFunc<PayloadType>) {
+  public process (callback: ProcessFunc<PayloadType>): this {
     this.func = callback;
     return this;
   }
@@ -41,27 +42,40 @@ export class Action<PayloadType = any> {
   }
 
   public async call (payload: PayloadType): Promise<ActionReturn> {
-    return await new Promise(async (resolve, reject) => {
-      let key = "";
-      if (this._cache) {
-        try {
-          key = this.makeCacheKey(payload);
-          const cached = await this.instance().cache.get(key);
-          if (cached) return resolve(cached);
-        } catch (error) {}
-      }
-      const job = this.queue.createJob(payload);
-      job.on('succeeded', (result) => {
+    try {
+      return await new Promise(async (resolve, reject) => {
+        let key = "";
         if (this._cache) {
           try {
-            this.instance().cache.set(key, result, { time: this._cache, unit: 'milliseconds' });
+            key = this.makeCacheKey(payload);
+            const cached = await this.instance().cache.get(key);
+            if (cached) return resolve(cached);
           } catch (error) {}
         }
-        return resolve(result);
+        const job = this.queue.createJob(payload);
+        job.on('succeeded', (result) => {
+          if (this._cache) {
+            try {
+              this.instance().cache.set(key, result, { time: this._cache, unit: 'milliseconds' });
+            } catch (error) {}
+          }
+          return resolve(result);
+        });
+        job.on('failed', (error) => (reject(error)));
+        job.save();
       });
-      job.on('failed', (error) => (reject(error)));
-      job.save();
-    });
+    } catch (error) {
+      if (this.catchFunc) {
+        this.catchFunc(error);
+      } else if (this.instance().globalCatchFunc) {
+        this.instance().globalCatchFunc(error);
+      }
+    }
+  }
+
+  public catch (catchFunc: (error: any) => void) {
+    this.catchFunc = catchFunc;
+    return this;
   }
 
   public initListen () {

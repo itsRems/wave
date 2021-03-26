@@ -31,6 +31,8 @@ export class Wave {
   public storage: Storage;
   public cache: Cache;
 
+  public globalCatchFunc?: Function;
+
   public ready: boolean = false;
 
   constructor () {
@@ -106,6 +108,11 @@ export class Wave {
 
   public SetStorage (driver: StorageDriver): this {
     this.storage = new Storage(driver);
+    return this;
+  }
+
+  public SetGlobalCatch (func: (error: any) => void): this {
+    this.globalCatchFunc = func;
     return this;
   }
 
