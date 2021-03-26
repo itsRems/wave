@@ -32,7 +32,7 @@ export class Link {
     }
     this._ws.onclose = () => {
       this.ready = false;
-      setTimeout(() => this.connect, this.config.reconnectInterval);
+      setInterval(() => this.connect, this.config.reconnectInterval);
     }
     this.Listen();
     this.globalBind();
