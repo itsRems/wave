@@ -54,6 +54,7 @@ export class Link {
       }))
       const onReturn = (data) => {
         this.off(`wave-call-incoming-${action}`, onReturn);
+        if (!data) data = { status: 'unknown', data: 'nothing_returned' };
         return resolve(data);
       };
       this.on(`wave-call-return-${action}`, onReturn);
