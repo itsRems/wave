@@ -1,6 +1,7 @@
 export interface LinkConfig {
   uri: string;
   reconnectInterval: number;
+  actionTimeout: number;
 }
 
 export interface ActionReturn {
@@ -20,6 +21,7 @@ export class Link {
     this.config = {
       uri: 'ws://localhost:1500',
       reconnectInterval: 1500,
+      actionTimeout: 16000,
       ...config
     }
     this.connect();
@@ -52,7 +54,9 @@ export class Link {
         action: `wave-call-incoming-${action}`,
         data: payload
       }))
+      let to = setTimeout(() => (resolve({ status: 'timeout', data: '' })), this.config.actionTimeout);
       const onReturn = (data) => {
+        clearTimeout(to);
         this.off(`wave-call-incoming-${action}`, onReturn);
         if (!data) data = { status: 'unknown', data: 'nothing_returned' };
         return resolve(data);
