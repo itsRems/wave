@@ -34,7 +34,7 @@ export class Link {
     }
     this._ws.onclose = () => {
       this.ready = false;
-      setInterval(() => this.connect, this.config.reconnectInterval);
+      setInterval(this.connect, this.config.reconnectInterval);
     }
     this.Listen();
     this.globalBind();
