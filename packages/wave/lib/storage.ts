@@ -3,6 +3,7 @@ import { mergeTo } from "./utils";
 
 export interface StorageDriver {
   usesJson?: boolean;
+  supportsIndexing?: boolean;
   initialize: {
     (instance: Wave): Promise<void>;
   };
@@ -74,7 +75,7 @@ export class Storage {
       const model = collection._model;
       for (const key in model) {
         const types = model[key];
-        if (types.includes('Index')) await this.driver.createIndex(collection, key);
+        if (types.includes('Index') && this.driver.supportsIndexing) await this.driver.createIndex(collection, key);
       }
     }
     this.storageReady = true;
