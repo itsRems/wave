@@ -1,6 +1,7 @@
 export interface LinkConfig {
   uri: string;
   reconnectInterval: number;
+  maxReconnectAttempts: number;
   actionTimeout: number;
 }
 
@@ -21,6 +22,7 @@ export class Link {
     this.config = {
       uri: 'ws://localhost:1500',
       reconnectInterval: 1500,
+      maxReconnectAttempts: 5,
       actionTimeout: 16000,
       ...this.config,
       ...config
@@ -50,7 +52,7 @@ export class Link {
 
   public async Call (action: string, payload: any): Promise<ActionReturn> {
     return await new Promise(async (resolve) => {
-      await this.waitForReady();
+      if (!await this.waitForReady()) return resolve({ status: 'timeout', data: '' });
       this._ws.send(JSON.stringify({
         action: `wave-call-incoming-${action}`,
         data: payload
@@ -99,7 +101,10 @@ export class Link {
   private async waitForReady () {
     return await new Promise((resolve) => {
       let int = undefined;
+      let tries = 0;
       const checkInit = () => {
+        tries++;
+        if (tries > this.config.maxReconnectAttempts) return resolve(false);
         if (this.ready) {
           clearInterval(int);
           return resolve(true);
