@@ -155,7 +155,14 @@ We can see a few things here: first, the latency of the first call was of only 2
 
 Instead, we made a cache key, checked for it inside our redis server, and got an output - only the 2nd time, as the first run took care of actually running our function and saving the result. Neat, right ?
 ## Collections
-@todo
+
+#### Data types
+* PrimaryKey
+* Required: required to create a new document
+* Internal: data type that can be returned using .internal() but won't be included in .public(). Useful for user data like email, birthdates, etc.
+* Secret: data type that will not be returned when using .internal() or .public(). Useful for passwords, secret keys, etc.
+* Index: used by storage drives for DB indexing
+* Unique
 
 ## Config
 @todo
