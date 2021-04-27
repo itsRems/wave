@@ -104,9 +104,11 @@ export class Link {
       let tries = 0;
       const checkInit = () => {
         tries++;
-        if (tries > this.config.maxReconnectAttempts) return resolve(false);
-        if (this.ready) {
+        if (tries > this.config.maxReconnectAttempts) {
           clearInterval(int);
+          return resolve(false);
+        }
+        if (this.ready) {
           return resolve(true);
         }
       }
