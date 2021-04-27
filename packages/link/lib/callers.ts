@@ -6,7 +6,7 @@ export function link (): Link {
   return link;
 }
 
-export function config (config: LinkConfig) {
+export function config (config: Partial<LinkConfig>) {
   link().Configure(config);
   return link();
 }
