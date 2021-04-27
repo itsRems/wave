@@ -105,7 +105,7 @@ export class Link {
           return resolve(true);
         }
       }
-      int = setInterval(checkInit, 50);
+      int = setInterval(checkInit, this.config.reconnectInterval);
     });
   }
 
