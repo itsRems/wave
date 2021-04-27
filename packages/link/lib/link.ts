@@ -1,7 +1,7 @@
 export interface LinkConfig {
   uri: string;
   reconnectInterval: number;
-  maxReconnectAttempts: number;
+  maxReadyTries: number;
   actionTimeout: number;
 }
 
@@ -22,7 +22,7 @@ export class Link {
     this.config = {
       uri: 'ws://localhost:1500',
       reconnectInterval: 1500,
-      maxReconnectAttempts: 5,
+      maxReadyTries: 5,
       actionTimeout: 16000,
       ...this.config,
       ...config
@@ -37,7 +37,7 @@ export class Link {
     }
     this._ws.onclose = () => {
       this.ready = false;
-      setInterval(() => this.connect(), this.config.reconnectInterval);
+      setTimeout(() => this.connect(), this.config.reconnectInterval);
     }
     this.Listen();
     this.globalBind();
@@ -104,7 +104,7 @@ export class Link {
       let tries = 0;
       const checkInit = () => {
         tries++;
-        if (tries > this.config.maxReconnectAttempts) {
+        if (tries > this.config.maxReadyTries) {
           clearInterval(int);
           return resolve(false);
         }
