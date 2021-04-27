@@ -22,6 +22,7 @@ export class Link {
       uri: 'ws://localhost:1500',
       reconnectInterval: 1500,
       actionTimeout: 16000,
+      ...this.config,
       ...config
     }
     this.connect();
