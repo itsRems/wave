@@ -90,10 +90,10 @@ export class WaveMongoDB {
     return {
       initialize: () => this.initialize(),
       createTableIfNotExist: () => (true),
-      createDocument: this.createOne,
-      updateDocument: this.updateDocument,
-      findById: this.findById,
-      findOne: this.findOne
+      createDocument: async (collection, data) => (await this.createOne(collection, data)),
+      updateDocument: async (collection, id, updates) => (await this.updateDocument(collection, id, updates)),
+      findById: async (collection, id) => (await this.findById(collection, id)),
+      findOne: async (collection, query) => (await this.findOne(collection, query))
     }
   }
 }
