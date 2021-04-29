@@ -35,9 +35,13 @@ export class Link {
   private connect () {
     this._ws = new WebSocket(this.config.uri);
     this._ws.onopen = () => {
+      console.log(`[Wave] ws open, ready for events !`);
       this.ready = true;
     }
     this._ws.onclose = () => {
+      this.ready = false;
+    }
+    this._ws.onerror = () => {
       this.ready = false;
     }
     this.Listen();
