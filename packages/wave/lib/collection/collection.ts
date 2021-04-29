@@ -61,6 +61,7 @@ export class Collection <DataType = any> {
       }
     }
     const id = await this.instance().storage.createDocument(this, data);
+    console.log({ id });
     return await this.findById(id);
   }
 
