@@ -123,10 +123,12 @@ export class Link {
   }
 
   private setInt () {
-    if (this.interval) clearInterval(this.interval);
-    this.interval = setInterval(() => {
-      if (!this.ready) this.connect();
-    }, this.config.reconnectInterval);
+    setTimeout(() => {
+      if (this.interval) clearInterval(this.interval);
+      this.interval = setInterval(() => {
+        if (!this.ready) this.connect();
+      }, this.config.reconnectInterval);
+    }, 5000);
   }
 
   private globalBind () {
