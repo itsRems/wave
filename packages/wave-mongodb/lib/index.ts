@@ -36,19 +36,23 @@ export class WaveMongoDB {
   }
 
   private async findById (collection, id) {
-    const dbCol = this.db.collection(collection.name);
-    const query = this.options.replaceMongoId ? {
-      _id: id
-    } : {
-      [collection.primaryKey]: id
+    try {
+      const dbCol = this.db.collection(collection.name);
+      const query = this.options.replaceMongoId ? {
+        _id: id
+      } : {
+        [collection.primaryKey]: id
+      }
+      const result = await dbCol.findOne(query);
+      if (!result) return undefined;
+      if (this.options.replaceMongoId) {
+        result[collection.primaryKey] = result._id;
+        delete result._id;
+      }
+      return result;
+    } catch (error) {
+      return undefined; 
     }
-    const result = await dbCol.findOne(query);
-    if (!result) return undefined;
-    if (this.options.replaceMongoId) {
-      result[collection.primaryKey] = result._id;
-      delete result._id;
-    }
-    return result;
   }
 
   private async updateDocument (collection, id, updates) {
@@ -66,14 +70,18 @@ export class WaveMongoDB {
   }
 
   private async findOne (collection, fields) {
-    const dbCol = this.db.collection(collection.name);
-    const result = await dbCol.findOne(fields);
-    if (!result) return undefined;
-    if (this.options.replaceMongoId) {
-      result[collection.primaryKey] = result._id;
-      delete result._id;
+    try {
+      const dbCol = this.db.collection(collection.name);
+      const result = await dbCol.findOne(fields);
+      if (!result) return undefined;
+      if (this.options.replaceMongoId) {
+        result[collection.primaryKey] = result._id;
+        delete result._id;
+      }
+      return result;
+    } catch (error) {
+      return undefined;
     }
-    return result;
   }
 
   public export (): any {

@@ -17,6 +17,7 @@ export class Link {
   } = {};
   public ready: boolean;
   public config: LinkConfig;
+  private interval;
 
   constructor (config?: Partial<LinkConfig>) {
     this.config = {
@@ -28,16 +29,16 @@ export class Link {
       ...config
     }
     this.connect();
+    this.setInt();
   }
 
-  private connect (retry = 0) {
+  private connect () {
     this._ws = new WebSocket(this.config.uri);
     this._ws.onopen = () => {
       this.ready = true;
     }
     this._ws.onclose = () => {
       this.ready = false;
-      if (retry < this.config.maxRetries) setTimeout(() => this.connect(retry + 1), this.config.reconnectInterval);
     }
     this.Listen();
     this.globalBind();
@@ -48,6 +49,7 @@ export class Link {
       ...this.config,
       ...config
     };
+    this.setInt();
   }
 
   public async Call (action: string, payload: any): Promise<ActionReturn> {
@@ -114,6 +116,13 @@ export class Link {
       }
       int = setInterval(checkInit, this.config.reconnectInterval);
     });
+  }
+
+  private setInt () {
+    if (this.interval) clearInterval(this.interval);
+    this.interval = setInterval(() => {
+      if (!this.ready) this.connect();
+    }, this.config.reconnectInterval);
   }
 
   private globalBind () {
