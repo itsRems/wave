@@ -32,7 +32,9 @@ export class WaveMongoDB {
       data._id = data[collection.primaryKey];
       delete data[collection.primaryKey];
     }
-    return (await dbCol.insertOne(data)).insertedId;
+    const insert = await dbCol.insertOne(data);
+    console.log({ insert });
+    return insert.insertedId;
   }
 
   private async findById (collection, id) {
