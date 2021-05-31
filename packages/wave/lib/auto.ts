@@ -13,6 +13,7 @@ export async function controllers (path: string) {
         const name = keys[0];
         if (name) {
           const controller = _import[name];
+          console.log({ controller });
         }
       }
     }
