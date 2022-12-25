@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { controller } from '@pulsejs/wave';
+import { controller } from '@itsrems/wave';
 import * as actions from './account.actions';
 import {
   AccountCollection as collection

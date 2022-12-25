@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { action, core, dial } from '@pulsejs/wave';
+import { action, core, dial } from '@itsrems/wave';
 import {
   OrderCollection as collection
 } from './order.store';

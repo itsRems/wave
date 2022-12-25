@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { call } from '@pulsejs/link';
+import { call } from '@itsrems/link';
 
 export async function createAccount (username: string, email: string, password: string) {
   const { data, status } = await call('account-create', {

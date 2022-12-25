@@ -1,8 +1,8 @@
 {
-  "name": "pulse-wave",
+  "name": "wave",
   "version": "1.0.0-alpha.0",
   "main": "index.js",
-  "repository": "git@github.com:itsRems/pulse-wave",
+  "repository": "git@github.com:itsRems/wave",
   "author": "itsRems <contact@itsrems.com>",
   "license": "MIT",
   "private": true,

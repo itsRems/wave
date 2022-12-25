@@ -8,9 +8,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@pulsejs/core": "~3.5.1",
-    "@pulsejs/next": "^3.5.4",
-    "@pulsejs/react": "~3.5.1",
     "@itsrems/link": "1.0.0-alpha.1",
     "next": "latest",
     "react": "~16.13.0",

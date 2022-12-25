@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { auto, config, start } from '@pulsejs/wave';
+import { auto, config, start } from '@itsrems/wave';
 
 config({
   cache: {

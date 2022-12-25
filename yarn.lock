@@ -1114,21 +1114,6 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/context-base/-/context-base-0.14.0.tgz#c67fc20a4d891447ca1a855d7d70fa79a3533001"
   integrity sha512-sDOAZcYwynHFTbLo6n8kIbLiVF3a3BLkrmehJUyEbT9F+Smbi47kLGS2gG2g0fjBLR/Lr1InPD7kXL7FaTqEkw==
 
-"@pulsejs/core@~3.5.1":
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/@pulsejs/core/-/core-3.5.2.tgz#9c0280a7794adecaca2953a09187d4857f36e3fb"
-  integrity sha512-ikx1ZiR0X5rvOukNZ59rySPrWEQJd2XHxIz0WenrJHD4ojGYXv0QyTmIzumCvDg+VVSwWYDtUyL1Gou1sJLECw==
-
-"@pulsejs/next@^3.5.4":
-  version "3.5.4"
-  resolved "https://registry.yarnpkg.com/@pulsejs/next/-/next-3.5.4.tgz#84a606fa31bf00864ad561c7d44bc8f6e15221e7"
-  integrity sha512-c7JSgY5ozv3lT1h7K6Igmrntq5tOy6GT64nhmnU5R53mrA2BgsWlSnWzhR2aOa2wXq5qbwT1/t3MOSAtYH9D+w==
-
-"@pulsejs/react@~3.5.1":
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/@pulsejs/react/-/react-3.5.2.tgz#737d8b12720410a3347de47023e354a5f5afb7db"
-  integrity sha512-kvHu8iPJVAEwXdvGwO9IZJkA01L0T5seLfRIdKH4NoWDBFVnznA3WQUMp5rVCoTclBDkUDUIK6nqCgOHZMUNDA==
-
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"

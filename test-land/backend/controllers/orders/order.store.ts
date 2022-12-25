@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { collection, data, utils } from '@pulsejs/wave';
+import { collection, data, utils } from '@itsrems/wave';
 import { OrderBody } from './order.interfaces';
 
 export const OrderCollection = collection<OrderBody>()

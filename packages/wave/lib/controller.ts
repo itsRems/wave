@@ -41,7 +41,3 @@ export class Controller<O extends Partial<ControllerConfig> = Partial<Controller
     return this as this & R;
   }
 }
-
-/**
- * Yoink'd from pulse !
- */

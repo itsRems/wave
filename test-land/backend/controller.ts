@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { collection, controller, data } from '@pulsejs/wave';
+import { collection, controller, data } from '@itsrems/wave';
 
 interface AccountBody {
   username: string;

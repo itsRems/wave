@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { collection, data, utils } from '@pulsejs/wave';
+import { collection, data, utils } from '@itsrems/wave';
 import { AccountBody } from './account.interfaces';
 
 export const AccountCollection = collection<AccountBody>('account-collection')
